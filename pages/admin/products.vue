@@ -14,7 +14,12 @@
         @update:options="loadItems"
       >
         <template #item.actions="{ item }">
-          <v-icon class="mr-2" color="primary">mdi-pencil</v-icon>
+          <v-icon
+            class="mr-2"
+            color="primary"
+            @click="(editDialog = true), (pageState.editId = `${item.id}`)"
+            >mdi-pencil</v-icon
+          >
           <v-icon
             color="primary"
             @click="(dialog = true), (pageState.deleteItem = item)"
@@ -24,27 +29,32 @@
       </v-data-table-server>
     </div>
 
-    <div class="text-center pa-4">
-      <v-dialog v-model="dialog" max-width="400" persistent>
-        <v-card :text="questionDelete" title="Confirmation">
-          <template v-slot:actions>
-            <v-spacer></v-spacer>
+    <v-dialog v-model="dialog" max-width="400" persistent>
+      <v-card :text="questionDelete" title="Confirmation">
+        <template v-slot:actions>
+          <v-spacer></v-spacer>
 
-            <v-btn @click="dialog = false" color="primary" variant="elevated">
-              Cancel
-            </v-btn>
+          <v-btn @click="dialog = false" color="primary" variant="elevated">
+            Cancel
+          </v-btn>
 
-            <v-btn
-              @click="deleteItem(pageState.deleteItem.id)"
-              color="primary"
-              variant="outlined"
-            >
-              Confirm
-            </v-btn>
-          </template>
-        </v-card>
-      </v-dialog>
-    </div>
+          <v-btn
+            @click="deleteItem(pageState.deleteItem.id)"
+            color="primary"
+            variant="outlined"
+          >
+            Confirm
+          </v-btn>
+        </template>
+      </v-card>
+    </v-dialog>
+
+    <EditProductDialog
+      :bookId="pageState.editId"
+      :active="editDialog"
+      @close="editDialog = false"
+      @submit="(editDialog = false), loadItems({ page: 1, itemsPerPage: 5, sortBy: pageState.sort })"
+    ></EditProductDialog>
   </div>
 </template>
 
@@ -56,20 +66,6 @@ definePageMeta({
   layout: "admin",
 });
 
-const pageState = reactive({
-  itemsPerPage: 5,
-  loading: true,
-  totalItems: 0,
-  items: [],
-  deleteItem: null,
-});
-const dialog = ref(false);
-const questionDelete = computed(() => {
-  if (pageState.deleteItem) {
-    return `Are you sure you want to delete ${pageState.deleteItem.name}?`;
-  }
-  return "Are you sure you want to delete this book?";
-});
 const DEFAULT_HEADERS = [
   {
     title: "ID",
@@ -78,16 +74,34 @@ const DEFAULT_HEADERS = [
   },
   { title: "Book name", key: "name", align: "start" },
   { title: "Author", key: "user_name", align: "start" },
-  { title: "Category", key: "category_name", align: "start"},
+  { title: "Category", key: "category_name", align: "start" },
   { title: "Price ($)", key: "price", align: "center" },
   { title: "Stock", key: "stock", align: "center" },
   { title: "", key: "actions", align: "center" },
 ];
-const DEFAULT_SORT = [{ key: "id", order: 'desc' }];
+const DEFAULT_SORT = [{ key: "id", order: "desc" }];
+const pageState = reactive({
+  itemsPerPage: 5,
+  loading: true,
+  totalItems: 0,
+  items: [],
+  deleteItem: null,
+  editId: "",
+  sort: DEFAULT_SORT,
+});
+const dialog = ref(false);
+const editDialog = ref(false);
+
+const questionDelete = computed(() => {
+  if (pageState.deleteItem) {
+    return `Are you sure you want to delete ${pageState.deleteItem.name}?`;
+  }
+  return "Are you sure you want to delete this book?";
+});
 
 const loadItems = async ({ page, itemsPerPage, sortBy }) => {
-    console.log(sortBy)
   pageState.loading = true;
+  pageState.sort = sortBy;
 
   const { api } = useApi(undefined, "GET", null, undefined);
   let paging = "";
@@ -100,7 +114,7 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
   if (sortBy && sortBy.length) {
     sorting += "&sort=" + JSON.stringify(sortBy[0]);
   }
- 
+
   const { data: responseData } = await api("/books?" + paging + sorting);
 
   if (!responseData) {
@@ -128,8 +142,6 @@ const deleteItem = async (id) => {
 
   dialog.value = false;
 };
-
-loadItems({ page: 1, itemsPerPage: 5, sortBy: DEFAULT_SORT });
 </script>
 
 <style scoped>

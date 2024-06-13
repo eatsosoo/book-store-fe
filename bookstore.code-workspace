@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+  ],
+  "settings": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.fixAll.stylelint": "explicit"
+    },
+    "editor.formatOnSave": true,
+    "vetur.experimental.templateInterpolationService": true,
+    "cSpell.words": [
+      "toastify",
+      "vuetify",
+      "nuxt",
+      "pinia",
+      "vuex",
+    ]
+  }
+}

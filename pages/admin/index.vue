@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Admin Page cc</h1>
+        <h1>Overview</h1>
         <!-- Add your admin page content here -->
     </div>
 </template>

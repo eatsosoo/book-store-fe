@@ -20,6 +20,9 @@
                     <NuxtLink to="/admin/add" class="Link">
                         <v-list-item prepend-icon="mdi-plus-box-multiple" title="New" value="new_product"></v-list-item>
                     </NuxtLink>
+                    <NuxtLink to="/admin/categories" class="Link">
+                        <v-list-item prepend-icon="mdi-view-list" title="Categories" value="categories"></v-list-item>
+                    </NuxtLink>
                 </v-list>
             </v-navigation-drawer>
             <v-main class="BgMain">

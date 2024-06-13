@@ -90,11 +90,33 @@
         </v-col>
       </v-row>
     </div>
+
+    <v-dialog
+      v-model="dialog.active"
+      width="auto"
+    >
+      <v-card
+        max-width="400"
+        :prepend-icon="dialog.icon"
+        :text="dialog.message"
+        :title="dialog.title"
+      >
+        <template v-slot:actions>
+          <v-btn
+            class="ms-auto"
+            color="primary"
+            variant="elevated"
+            text="Ok"
+            @click="dialog.active = false"
+          ></v-btn>
+        </template>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
-<script setup>
-import { useApi } from "@/composable/useApiFetch";
+<script setup lang="ts">
+import { useApi, type ResponseResultType } from "@/composable/useApiFetch";
 import { reactive, ref } from "vue";
 
 definePageMeta({
@@ -113,37 +135,58 @@ const formData = reactive({
   book_cover_url: "",
   category_id: 1,
 });
+const dialog = reactive({
+  active: false,
+  message: "Book has been added successfully!",
+  icon: "mdi-check-circle-outline",
+  title: 'Completed',
+});
 const categoryList = ref([]);
 const loading = ref(false);
 
-const required = (v) => {
-  return !!v || "Field is required";
-};
-
-const number = (v) => {
-  return /^\d+$/.test(v) || "Field must be a number";
-};
-
-const url = (v) => {
-  const pattern = /^(ftp|http|https):\/\/[^ "]+$/;
-  return pattern.test(v) || "Invalid URL";
+const resetFormData = () => {
+  formData.name = "";
+  formData.author = "";
+  formData.user_id = 1;
+  formData.price = "";
+  formData.stock = "";
+  formData.book_cover_url = "";
+  formData.category_id = 1;
 };
 
 const onSubmit = async () => {
   loading.value = true;
   const { api } = useApi(undefined, "POST", null, formData);
-  const { data: responseData } = await api(`/books`);
+  const { data: responseData } = await api<ResponseResultType>(`/books`);
 
-  console.log(responseData);
+  if (responseData) {
+    resetFormData();
+  }
+
+  if (responseData.value) {
+    const { result } = responseData.value;
+    dialog.active = true;
+
+    if (!result) {
+      dialog.icon = "mdi-close-circle-outline";
+      dialog.message = "Failed to add book!";
+      dialog.title = "Error";
+    } else {
+      dialog.icon = "mdi-check-circle-outline";
+      dialog.message = "Book has been added successfully!";
+      dialog.title = "Completed";
+    }
+  }
+
   loading.value = false;
 };
 
 const loadCategories = async () => {
   const { api } = useApi(undefined, "GET", null, undefined);
-  const { data: responseData } = await api(`/categories`);
+  const { data: responseData } = await api<ResponseResultType>(`/categories`);
 
   if (!responseData) {
-    categories.value = [];
+    categoryList.value = [];
   }
 
   if (responseData.value) {

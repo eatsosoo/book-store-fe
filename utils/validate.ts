@@ -10,3 +10,11 @@ export const url = (v: any) => {
   const pattern = /^(ftp|http|https):\/\/[^ "]+$/;
   return pattern.test(v) || "Invalid URL";
 };
+
+export const minLength = (v: string, minLength: number) => {
+  return v.length >= minLength || `Field must have at least ${minLength} characters`;
+};
+
+export const email = (v: any) => { 
+  const pattern = /^[^\s@]+@[^\s@]+.[^\s@]+$/; return pattern.test(v) || "Invalid email"; 
+};

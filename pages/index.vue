@@ -24,19 +24,23 @@
             <NuxtLink to="/login">
               <v-btn
                 color="primary"
-                @click="onClick"
                 variant="outlined"
                 rounded="pill"
                 class="mr-4"
                 >Log In</v-btn
               >
             </NuxtLink>
-            <v-btn color="primary" rounded="pill" @click="onClick"
-              >Sign Up</v-btn
-            >
+            <NuxtLink to="/register">
+              <v-btn color="primary" rounded="pill">Sign Up</v-btn>
+            </NuxtLink>
           </div>
           <div v-else>
-            <v-btn density="default" icon="mdi-logout" color="primary" @click="logout"></v-btn>
+            <v-btn
+              density="default"
+              icon="mdi-logout"
+              color="primary"
+              @click="logout"
+            ></v-btn>
           </div>
         </div>
       </v-container>

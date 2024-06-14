@@ -61,14 +61,12 @@
       </v-btn>
 
       <v-card-text class="text-center">
-        <a
+        <NuxtLink
           class="text-primary text-decoration-none"
-          href="#"
-          rel="noopener noreferrer"
-          target="_blank"
+          to="/register"
         >
           Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
-        </a>
+        </NuxtLink>
       </v-card-text>
     </v-card>
   </div>

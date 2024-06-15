@@ -1,17 +1,18 @@
 <template>
-  <div>
+  <div class="h-screen d-flex justify-center align-center">
+    <v-card
+      class="mx-auto my-auto pa-12 pb-8"
+      elevation="8"
+      width="448"
+      max-height="700"
+      rounded="lg"
+    >
     <v-img
       class="mx-auto my-6 rounded-circle"
       max-width="150"
       src="https://cdn.dribbble.com/userupload/6810642/file/original-45a54e0571ae13ce154f565f49615607.png?resize=400x0"
     ></v-img>
 
-    <v-card
-      class="mx-auto pa-12 pb-8"
-      elevation="8"
-      max-width="448"
-      rounded="lg"
-    >
       <v-form v-model="form" @submit.prevent="onSubmit">
         <div class="text-subtitle-1 text-medium-emphasis">Username</div>
 
@@ -22,6 +23,7 @@
           placeholder="username"
           prepend-inner-icon="mdi-account-circle"
           variant="outlined"
+          base-color="primary"
         ></v-text-field>
 
         <div class="text-subtitle-1 text-medium-emphasis">Account</div>
@@ -33,6 +35,7 @@
           placeholder="Email address"
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
+          base-color="primary"
         ></v-text-field>
 
         <div
@@ -50,6 +53,7 @@
           placeholder="Enter your password"
           prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
+          base-color="primary"
           @click:append-inner="visible = !visible"
         ></v-text-field>
 
@@ -89,9 +93,15 @@ const registerForm = reactive({
   password: "",
 });
 
+const reset = () => {
+  registerForm.name = "";
+  registerForm.email = "";
+  registerForm.password = "";
+};
+
 const onSubmit = async () => {
   loading.value = true;
-  const { api } = useApi(undefined, "POST", null, registerForm);
+  const { api } = useApi(undefined, "POST", null, {...registerForm});
   const { data: responseData, error } = await api<ResponseResultType>(`/register`);
   loading.value = false;
   
@@ -102,9 +112,10 @@ const onSubmit = async () => {
   }
   
   if (responseData.value) {
-    const { result } = responseData.value;
-    if (result) {
+    const { data } = responseData.value;
+    if (data) {
       toastSuccess('Register success. Please login to continue.');
+      reset();
     } else {
       toastError("Something wrong. Please try again later.");
     }

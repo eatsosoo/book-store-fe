@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
     if (process.client) {
         const token = localStorage.getItem('access_token')
-        if (!token && to.path !== '/login') {
+        if (!token && to.path !== '/login' && to.path.startsWith('/admin')) {
             return navigateTo('/login')
         } else if (token && to.path === '/login') {
             return navigateTo('/')

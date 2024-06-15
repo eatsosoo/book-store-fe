@@ -14,6 +14,7 @@
               clearable
               variant="outlined"
               density="compact"
+              base-color="primary"
               class="mb-3"
             ></v-text-field>
             <v-text-field
@@ -24,6 +25,7 @@
               clearable
               variant="outlined"
               density="compact"
+              base-color="primary"
               class="mb-3"
             ></v-text-field>
             <v-select
@@ -37,6 +39,7 @@
               clearable
               variant="outlined"
               density="compact"
+              base-color="primary"
               class="mb-3"
             ></v-select>
             <v-text-field
@@ -47,6 +50,7 @@
               required
               clearable
               density="compact"
+              base-color="primary"
               class="mb-3"
             ></v-text-field>
             <v-text-field
@@ -57,6 +61,7 @@
               required
               clearable
               density="compact"
+              base-color="primary"
               prefix="$"
               class="mb-3"
             ></v-text-field>
@@ -68,6 +73,7 @@
               required
               clearable
               density="compact"
+              base-color="primary"
               class="mb-3"
             ></v-text-field>
             <div class="text-center">
@@ -91,10 +97,7 @@
       </v-row>
     </div>
 
-    <v-dialog
-      v-model="dialog.active"
-      width="auto"
-    >
+    <v-dialog v-model="dialog.active" width="auto">
       <v-card
         max-width="400"
         :prepend-icon="dialog.icon"
@@ -139,7 +142,7 @@ const dialog = reactive({
   active: false,
   message: "Book has been added successfully!",
   icon: "mdi-check-circle-outline",
-  title: 'Completed',
+  title: "Completed",
 });
 const categoryList = ref([]);
 const loading = ref(false);

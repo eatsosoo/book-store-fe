@@ -53,7 +53,7 @@
       :bookId="pageState.editId"
       :active="editDialog"
       @close="editDialog = false"
-      @submit="(editDialog = false), loadItems({ page: 1, itemsPerPage: 5, sortBy: pageState.sort })"
+      @submit="(editDialog = false), loadItems({ page: 1, itemsPerPage: 10, sortBy: pageState.sort })"
     ></EditProductDialog>
   </div>
 </template>
@@ -81,7 +81,7 @@ const DEFAULT_HEADERS = [
 ];
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 const pageState = reactive({
-  itemsPerPage: 5,
+  itemsPerPage: 10,
   loading: true,
   totalItems: 0,
   items: [],
@@ -137,7 +137,7 @@ const deleteItem = async (id) => {
   const { data: responseData } = await api(`/books/${id}`);
 
   if (responseData) {
-    loadItems({ page: 1, itemsPerPage: 5, sortBy: DEFAULT_SORT });
+    loadItems({ page: 1, itemsPerPage: 10, sortBy: DEFAULT_SORT });
   }
 
   dialog.value = false;

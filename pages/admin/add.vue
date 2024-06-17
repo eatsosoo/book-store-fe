@@ -15,6 +15,7 @@
               variant="outlined"
               density="compact"
               base-color="primary"
+              color="primary"
               class="mb-3"
             ></v-text-field>
             <v-text-field
@@ -26,6 +27,7 @@
               variant="outlined"
               density="compact"
               base-color="primary"
+              color="primary"
               class="mb-3"
             ></v-text-field>
             <v-select
@@ -40,6 +42,7 @@
               variant="outlined"
               density="compact"
               base-color="primary"
+              color="primary"
               class="mb-3"
             ></v-select>
             <v-text-field
@@ -51,6 +54,7 @@
               clearable
               density="compact"
               base-color="primary"
+              color="primary"
               class="mb-3"
             ></v-text-field>
             <v-text-field
@@ -62,20 +66,33 @@
               clearable
               density="compact"
               base-color="primary"
+              color="primary"
               prefix="$"
               class="mb-3"
             ></v-text-field>
             <v-text-field
               v-model="formData.stock"
               :rules="[required, number]"
+              type="number"
               label="Stock"
               variant="outlined"
               required
               clearable
               density="compact"
               base-color="primary"
+              min="0"
+              color="primary"
               class="mb-3"
             ></v-text-field>
+            <v-textarea
+              v-model="formData.description"
+              label="Description"
+              variant="outlined"
+              density="compact"
+              base-color="primary"
+              color="primary"
+              class="mb-3"
+            ></v-textarea>
             <div class="text-center">
               <v-btn
                 :disabled="!form"
@@ -137,6 +154,7 @@ const formData = reactive({
   stock: "",
   book_cover_url: "",
   category_id: 1,
+  description: '',
 });
 const dialog = reactive({
   active: false,
@@ -155,6 +173,7 @@ const resetFormData = () => {
   formData.stock = "";
   formData.book_cover_url = "";
   formData.category_id = 1;
+  formData.description = '';
 };
 
 const onSubmit = async () => {

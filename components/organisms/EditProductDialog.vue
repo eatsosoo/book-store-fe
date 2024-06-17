@@ -80,6 +80,15 @@
                   density="compact"
                   class="mb-3"
                 ></v-text-field>
+                <v-textarea
+                  v-model="formData.description"
+                  label="Description"
+                  variant="outlined"
+                  density="compact"
+                  base-color="primary"
+                  color="primary"
+                  class="mb-3"
+                ></v-textarea>
               </div>
               <div class="text-center">
                 <v-btn
@@ -133,6 +142,7 @@ const formData = reactive({
   stock: "",
   book_cover_url: "",
   category_id: 1,
+  description: "",
 });
 const categoryList = ref([]);
 const loading = reactive({
@@ -199,6 +209,7 @@ const loadDetail = async () => {
     formData.stock = book.stock;
     formData.book_cover_url = book.book_cover_url;
     formData.category_id = book.category_id;
+    formData.description = book.description;
   }
 
   loading.detail = false;

@@ -67,6 +67,7 @@ export const useCartStore = defineStore("cart", {
 
     removeCartItem(itemId: number) {
       this.cart.items = this.cart.items.filter((item) => item.itemId !== itemId);
+      localStorage.setItem("cart", JSON.stringify(this.cart.items));
     },
 
     hasExistBookInCart(itemId: number) {

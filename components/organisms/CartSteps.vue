@@ -3,32 +3,17 @@
     <v-stepper v-model="step">
       <template v-slot:default="{ prev, next }">
         <v-stepper-header>
-          <v-stepper-item
-            title="Preview Order"
-            value="1"
-            :complete="step > '1'"
-            color="primary"
-          >
+          <v-stepper-item title="Preview Order" value="1" :complete="step > '1'" color="primary">
           </v-stepper-item>
 
           <v-divider></v-divider>
 
-          <v-stepper-item
-            title="Shipping"
-            value="2"
-            :complete="step > '2'"
-            color="primary"
-          >
+          <v-stepper-item title="Shipping" value="2" :complete="step > '2'" color="primary">
           </v-stepper-item>
 
           <v-divider></v-divider>
 
-          <v-stepper-item
-            title="Confirm Order"
-            value="3"
-            :complete="step > '3'"
-            color="primary"
-          >
+          <v-stepper-item title="Confirm Order" value="3" :complete="step > '3'" color="primary">
           </v-stepper-item>
         </v-stepper-header>
 
@@ -53,25 +38,12 @@
                     <td v-text="product.name"></td>
                     <td class="text-end">
                       <div class="d-flex justify-end align-center">
-                        <v-btn
-                          color="primary"
-                          density="compact"
-                          icon="mdi-plus"
-                          @click="plusQuantity(index)"
-                        ></v-btn>
+                        <v-btn color="primary" density="compact" icon="mdi-plus" @click="plusQuantity(index)"></v-btn>
                         <div class="QuantityText">{{ product.quantity }}</div>
-                        <v-btn
-                          color="primary"
-                          density="compact"
-                          icon="mdi-minus"
-                          @click="minusQuantity(index)"
-                        ></v-btn>
+                        <v-btn color="primary" density="compact" icon="mdi-minus" @click="minusQuantity(index)"></v-btn>
                       </div>
                     </td>
-                    <td
-                      class="text-end"
-                      v-text="product.quantity * product.price"
-                    ></td>
+                    <td class="text-end" v-text="product.quantity * product.price"></td>
                   </tr>
 
                   <tr>
@@ -87,38 +59,18 @@
           <v-stepper-window-item value="2">
             <h3 class="text-h6">Shipping</h3>
             <br />
-            <v-radio-group
-              v-model="shipping.cost"
-              label="Delivery Method"
-              color="primary"
-            >
+            <v-radio-group v-model="shipping.cost" label="Delivery Method" color="primary">
               <v-radio label="Standard Shipping" value="5"></v-radio>
               <v-radio label="Priority Shipping" value="10"></v-radio>
               <v-radio label="Express Shipping" value="15"></v-radio>
             </v-radio-group>
-            <h3 class="text-h6">Address</h3>
+            <h3 class="text-h6">Information</h3>
             <br />
-            <v-text-field
-              v-model="shipping.address"
-              density="compact"
-              variant="outlined"
-              hide-details
-              single-line
-              color="primary"
-              class="mx-4"
-            ></v-text-field>
+            <v-text-field v-model="shipping.address" :rules="[required]" label="Address" density="compact"
+              variant="outlined" hide-details color="primary" class="mx-4"></v-text-field>
             <br />
-            <h3 class="text-h6">Phone</h3>
-            <br />
-            <v-text-field
-              v-model="shipping.phone"
-              density="compact"
-              variant="outlined"
-              hide-details
-              single-line
-              color="primary"
-              class="mx-4"
-            ></v-text-field>
+            <v-text-field v-model="shipping.phone" :rules="[required, telephone]" label="Tel number" density="compact"
+              variant="outlined" color="primary" class="mx-4"></v-text-field>
             <br />
           </v-stepper-window-item>
 
@@ -139,10 +91,7 @@
                   <tr v-for="(product, index) in products" :key="index">
                     <td v-text="product.name"></td>
                     <td class="text-end" v-text="product.quantity"></td>
-                    <td
-                      class="text-end"
-                      v-text="product.quantity * product.price"
-                    ></td>
+                    <td class="text-end" v-text="product.quantity * product.price"></td>
                   </tr>
 
                   <tr>
@@ -159,15 +108,34 @@
                 </tbody>
               </v-table>
             </v-sheet>
+            <br></br>
+            <v-sheet border>
+              <v-table>
+                <thead>
+                  <tr>
+                    <th>Information</th>
+                    <th class="text-end">Detail</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <th>Address</th>
+                    <th class="text-end">{{ shipping.address }}</th>
+                  </tr>
+
+                  <tr>
+                    <th>Telephone</th>
+                    <th class="text-end">{{ shipping.phone }}</th>
+                  </tr>
+                </tbody>
+              </v-table>
+            </v-sheet>
           </v-stepper-window-item>
         </v-stepper-window>
 
-        <v-stepper-actions
-          color="primary"
-          :disabled="disabled"
-          @click:next="next"
-          @click:prev="prev"
-        ></v-stepper-actions>
+        <v-stepper-actions color="primary" :disabled="disabled" @click:next="next"
+          @click:prev="prev"></v-stepper-actions>
       </template>
     </v-stepper>
 
@@ -180,11 +148,7 @@
             Cancel
           </v-btn>
 
-          <v-btn
-            @click="deleteItem(deleteId)"
-            color="primary"
-            variant="outlined"
-          >
+          <v-btn @click="deleteItem(deleteId)" color="primary" variant="outlined">
             Confirm
           </v-btn>
         </template>
@@ -194,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import { useCartStore } from '~/store/cartStore';
+import { useCartStore } from "~/store/cartStore";
 
 const cartStore = useCartStore();
 const shipping = reactive({
@@ -205,7 +169,7 @@ const shipping = reactive({
 });
 const step = ref("0");
 const dialog = ref(false);
-const deleteId = ref<number | null>(null)
+const deleteId = ref<number | null>(null);
 
 const subtotal = computed(() => {
   return products.value.reduce(
@@ -221,24 +185,26 @@ const total = computed(() => {
 });
 
 const totalQuantity = computed(() => {
-  return products.value.reduce(
-    (acc: number, product: { quantity: number }) => {
-      return acc + product.quantity;
-    },
-    0
-  );
+  return products.value.reduce((acc: number, product: { quantity: number }) => {
+    return acc + product.quantity;
+  }, 0);
 });
 
 const products = computed(() => cartStore.cart.items);
 
 const disabled = computed(() => {
-  if (
-    (step.value === "2" && !shipping.address) ||
-    (step.value === "2" && !shipping.phone)
-  ) {
-    return "next";
+  const pattern = /^\d{10}$/;
+
+  if (step.value === "2") {
+    if (!shipping.address || !shipping.phone) {
+      return "next";
+    }
+
+    if (!pattern.test(shipping.phone)) {
+      return "next";
+    }
   }
-  
+
   if (step.value === "0" && totalQuantity.value === 0) {
     return "next";
   }

@@ -18,3 +18,8 @@ export const minLength = (v: string, minLength: number) => {
 export const email = (v: any) => { 
   const pattern = /^[^\s@]+@[^\s@]+.[^\s@]+$/; return pattern.test(v) || "Invalid email"; 
 };
+
+export const telephone = (v: any) => {
+  const pattern = /^\d{10}$/;
+  return pattern.test(v) || "Invalid telephone number";
+};

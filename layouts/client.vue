@@ -20,7 +20,7 @@
               @click:append-inner="onClick"
             ></v-text-field>
           </div>
-          <div v-if="!store.hasToken">
+          <div v-if="!authStore.hasToken">
             <NuxtLink to="/login">
               <v-btn
                 color="white"
@@ -33,25 +33,36 @@
               <v-btn color="white" rounded="pill">Sign Up</v-btn>
             </NuxtLink>
           </div>
-          <div v-else>
-            <v-btn
-              density="default"
-              icon="mdi-logout"
-              color="primary"
-              @click="logout"
-            ></v-btn>
+          <div v-else class="d-flex">
+            <div class="position-relative">
+              <NuxtLink to="/cart">
+                <v-btn
+                icon="mdi-cart"
+                color="white"
+                ></v-btn>
+              </NuxtLink>
+              <div class="position-absolute CartQuantity">{{ cartQuantity }}</div>
+            </div>
+            <div>
+              <v-btn
+                icon="mdi-logout"
+                color="white"
+                class="ml-4"
+                @click="logout"
+              ></v-btn>
+            </div>
           </div>
         </div>
       </v-container>
     </div>
-    <div class="BorderBottom bg-white">
+    <!-- <div class="BorderBottom bg-white">
       <v-container>
         <div class="d-flex justify-center">
           <div class="Tab">home</div>
           <div class="Tab">authors</div>
         </div>
       </v-container>
-    </div>
+    </div> -->
 
     <slot />
 
@@ -127,9 +138,14 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "~/store/authStore";
+import { useCartStore } from "~/store/cartStore";
 
-const store = useAuthStore();
+const authStore = useAuthStore();
+const cartStore = useCartStore();
 const loading = ref(false);
+
+const cartQuantity = computed(() => cartStore.cart.items.length);
+
 const onClick = () => {
   loading.value = true;
   setTimeout(() => {
@@ -196,5 +212,17 @@ const onClick = () => {
     margin: 20px 0;
     padding: 20px 30px;
   }
+}
+
+.CartQuantity {
+  right: -5px;
+  top: 0;
+  background: red;
+  width: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 12px;
+  color: white;
 }
 </style>

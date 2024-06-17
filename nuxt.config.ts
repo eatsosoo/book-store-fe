@@ -64,5 +64,9 @@ export default defineNuxtConfig({
       }
       setMiddleware(pages)
     }
-  }
+  },
+
+  css: [
+    '~/assets/styles/global.scss',
+  ],
 })

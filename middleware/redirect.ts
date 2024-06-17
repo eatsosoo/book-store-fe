@@ -1,7 +1,12 @@
 import { useAuthStore } from "~/store/authStore"
+import { useCartStore } from "~/store/cartStore"
 
 export default defineNuxtRouteMiddleware((to, from) => {
-    console.log(process.client, process.server);
+    const cartStore = useCartStore()
+    const cartStorage = localStorage.getItem('cart')
+    if (cartStore.cart.items.length === 0 && cartStorage) {
+        cartStore.cart.items = JSON.parse(cartStorage)
+    }
     
     if (to.path === '/register') {
         return

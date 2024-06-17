@@ -16,7 +16,7 @@
             <v-col cols="6">
               <h2>{{ bookDetail.name }}</h2>
               <p class="mt-2">-- {{ bookDetail.user_name }} --</p>
-              <h2 class="mt-2">{{ bookDetail.price }} $</h2>
+              <h2 class="mt-2">{{ bookDetail.price }} VNĐ</h2>
               <p class="mt-2 DescriptionDetail">{{ bookDetail.description }}</p>
 
               <div class="NumberInput">

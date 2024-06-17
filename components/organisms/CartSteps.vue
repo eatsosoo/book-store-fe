@@ -3,23 +3,23 @@
     <v-stepper v-model="step">
       <template v-slot:default="{ prev, next }">
         <v-stepper-header>
-          <v-stepper-item title="Preview Order" value="1" :complete="step > '1'" color="primary">
+          <v-stepper-item title="Xem trước đơn hàng" value="1" :complete="step > '1'" color="primary">
           </v-stepper-item>
 
           <v-divider></v-divider>
 
-          <v-stepper-item title="Shipping" value="2" :complete="step > '2'" color="primary">
+          <v-stepper-item title="Vận chuyển" value="2" :complete="step > '2'" color="primary">
           </v-stepper-item>
 
           <v-divider></v-divider>
 
-          <v-stepper-item title="Confirm Order" value="3" :complete="step > '3'" color="primary">
+          <v-stepper-item title="Xác nhận đơn hàng" value="3" :complete="step > '3'" color="primary">
           </v-stepper-item>
         </v-stepper-header>
 
         <v-stepper-window>
           <v-stepper-window-item value="1">
-            <h3 class="text-h6">Order</h3>
+            <h3 class="text-h6">Đơn hàng</h3>
 
             <br />
 
@@ -27,9 +27,9 @@
               <v-table>
                 <thead>
                   <tr>
-                    <th>Description</th>
-                    <th class="text-end">Quantity</th>
-                    <th class="text-end">Price</th>
+                    <th class="FontBold">Tên sách</th>
+                    <th class="text-end FontBold">Số lượng</th>
+                    <th class="text-end FontBold">Giá</th>
                   </tr>
                 </thead>
 
@@ -47,9 +47,9 @@
                   </tr>
 
                   <tr>
-                    <th>Total</th>
+                    <th>Tổng</th>
                     <th></th>
-                    <th class="text-end">${{ subtotal }}</th>
+                    <th class="text-end">{{ subtotal }} VNĐ</th>
                   </tr>
                 </tbody>
               </v-table>
@@ -57,14 +57,14 @@
           </v-stepper-window-item>
 
           <v-stepper-window-item value="2">
-            <h3 class="text-h6">Shipping</h3>
+            <h3 class="text-h6">Giao hàng</h3>
             <br />
-            <v-radio-group v-model="shipping.cost" label="Delivery Method" color="primary">
-              <v-radio label="Standard Shipping" value="5"></v-radio>
-              <v-radio label="Priority Shipping" value="10"></v-radio>
-              <v-radio label="Express Shipping" value="15"></v-radio>
+            <v-radio-group v-model="shipping.cost" label="Phương thức vận chuyển" color="primary">
+              <v-radio label="Vận chuyển tiêu chuẩn" value="5"></v-radio>
+              <v-radio label="Vận chuyển ưu tiên" value="10"></v-radio>
+              <v-radio label="Chuyển phát nhanh" value="15"></v-radio>
             </v-radio-group>
-            <h3 class="text-h6">Information</h3>
+            <h3 class="text-h6">Thông tin giao hàng</h3>
             <br />
             <v-text-field v-model="shipping.address" :rules="[required]" label="Address" density="compact"
               variant="outlined" hide-details color="primary" class="mx-4"></v-text-field>
@@ -81,29 +81,35 @@
               <v-table>
                 <thead>
                   <tr>
-                    <th>Description</th>
-                    <th class="text-end">Quantity</th>
-                    <th class="text-end">Price</th>
+                    <th class="FontBold">Ảnh bìa</th>
+                    <th class="FontBold">Tên sách</th>
+                    <th class="text-end FontBold">Số lượng</th>
+                    <th class="text-end FontBold">Giá</th>
                   </tr>
                 </thead>
 
                 <tbody>
                   <tr v-for="(product, index) in products" :key="index">
+                    <td>
+                      <img :src="product.image" :alt="`${index}`" class="ImageCartItem">
+                    </td>
                     <td v-text="product.name"></td>
                     <td class="text-end" v-text="product.quantity"></td>
                     <td class="text-end" v-text="product.quantity * product.price"></td>
                   </tr>
 
                   <tr>
-                    <td>Shipping</td>
+                    <td>Phí giao hàng</td>
+                    <td></td>
                     <td></td>
                     <td class="text-end" v-text="shipping.cost"></td>
                   </tr>
 
                   <tr>
-                    <th>Total</th>
+                    <th>Tổng</th>
                     <th></th>
-                    <th class="text-end">${{ total }}</th>
+                    <th></th>
+                    <th class="text-end">{{ total }} VNĐ</th>
                   </tr>
                 </tbody>
               </v-table>
@@ -113,19 +119,19 @@
               <v-table>
                 <thead>
                   <tr>
-                    <th>Information</th>
-                    <th class="text-end">Detail</th>
+                    <th class="FontBold">Thông tin giao hàng</th>
+                    <th class="text-end FontBold">Chi tiết</th>
                   </tr>
                 </thead>
 
                 <tbody>
                   <tr>
-                    <th>Address</th>
+                    <th>Địa chỉ</th>
                     <th class="text-end">{{ shipping.address }}</th>
                   </tr>
 
                   <tr>
-                    <th>Telephone</th>
+                    <th>Số điện thoại</th>
                     <th class="text-end">{{ shipping.phone }}</th>
                   </tr>
                 </tbody>
@@ -235,6 +241,9 @@ const deleteItem = (id: number | null) => {
 </script>
 
 <style lang="scss" scoped>
+.FontBold {
+    font-weight: bold !important;
+}
 .v-text-field {
   width: 300px;
 }
@@ -242,5 +251,10 @@ const deleteItem = (id: number | null) => {
 .QuantityText {
   text-align: center;
   width: 50px;
+}
+
+.ImageCartItem {
+  width: 50px;
+  margin-top: 5px;
 }
 </style>

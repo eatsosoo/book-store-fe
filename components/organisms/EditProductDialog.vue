@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" max-width="800" persistent>
     <v-card :loading="loading.detail" :disabled="loading.detail">
       <div class="bg-primary py-2 px-3 d-flex justify-space-between">
-        <p>Edit book</p>
+        <p>Cập nhât sản phẩm</p>
         <v-icon @click="emits('close')">mdi-close</v-icon>
       </div>
       <v-card-actions class="pa-3">
@@ -19,7 +19,7 @@
                 <v-text-field
                   v-model="formData.name"
                   :rules="[required]"
-                  label="Name of book"
+                  label="Tên sách"
                   required
                   clearable
                   variant="outlined"
@@ -29,7 +29,7 @@
                 <v-text-field
                   v-model="formData.author"
                   :rules="[required]"
-                  label="Author of book"
+                  label="Tác giả"
                   required
                   variant="outlined"
                   density="compact"
@@ -38,7 +38,7 @@
                 ></v-text-field>
                 <v-select
                   v-model="formData.category_id"
-                  label="Category"
+                  label="Danh mục"
                   :rules="[required]"
                   :items="categoryList"
                   item-title="name"
@@ -52,7 +52,7 @@
                 <v-text-field
                   v-model="formData.book_cover_url"
                   :rules="[required, url]"
-                  label="Book cover"
+                  label="Ảnh bìa sách"
                   variant="outlined"
                   required
                   clearable
@@ -62,18 +62,18 @@
                 <v-text-field
                   v-model="formData.price"
                   :rules="[required, number]"
-                  label="Price"
+                  label="Giá"
                   variant="outlined"
                   required
                   clearable
                   density="compact"
-                  prefix="$"
+                  suffix="VNĐ"
                   class="mb-3"
                 ></v-text-field>
                 <v-text-field
                   v-model="formData.stock"
                   :rules="[required, number]"
-                  label="Stock"
+                  label="Số lượng tồn kho"
                   variant="outlined"
                   required
                   clearable
@@ -82,7 +82,7 @@
                 ></v-text-field>
                 <v-textarea
                   v-model="formData.description"
-                  label="Description"
+                  label="Mô tả"
                   variant="outlined"
                   density="compact"
                   base-color="primary"
@@ -97,7 +97,7 @@
                   type="submit"
                   variant="elevated"
                   :loading="loading.submit"
-                  >Submit</v-btn
+                  >Cập nhật</v-btn
                 >
               </div>
             </v-form>

@@ -3,7 +3,7 @@
     <v-container>
       <v-row>
         <v-col cols="12" class="d-flex align-center">
-          <h1 class="flex-shrink-0 mr-5">Cart</h1>
+          <h1 class="flex-shrink-0 mr-5">Giỏ hàng</h1>
           <hr class="w-100" />
         </v-col>
       </v-row>

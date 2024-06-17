@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <h1>Orders</h1>
+    <div class="OrdersPage">
+      <h1 class="text-capitalize">đơn hàng</h1>
+
         <!-- Add your admin page content here -->
     </div>
 </template>

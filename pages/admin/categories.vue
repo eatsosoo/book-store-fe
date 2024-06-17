@@ -1,6 +1,6 @@
 <template>
   <div class="CategoryPage">
-    <h1 class="text-capitalize">categories</h1>
+    <h1 class="text-capitalize">danh mục</h1>
 
     <div class="pa-5 bg-white rounded-lg mt-5 BoxShadow">
       <v-data-table-server
@@ -43,7 +43,7 @@ const DEFAULT_HEADERS = [
     align: "start",
     key: "id",
   },
-  { title: "Category name", key: "name", align: "start" },
+  { title: "Tên danh mục", key: "name", align: "start" },
   { title: "", key: "actions", align: "center" },
 ];
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
@@ -73,7 +73,6 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     const { categories, pagination } = responseData.value.data;
     pageState.items = categories;
     pageState.totalItems = pagination.total;
-    console.log(pageState.items);
   }
 
   pageState.loading = false;

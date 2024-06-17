@@ -1,6 +1,6 @@
 <template>
   <div class="AdminProducts">
-    <h1 class="text-capitalize">new product</h1>
+    <h1 class="text-capitalize">thêm sản phẩm</h1>
 
     <div class="pa-10 bg-white rounded-lg mt-5 BoxShadow">
       <v-row>
@@ -9,7 +9,7 @@
             <v-text-field
               v-model="formData.name"
               :rules="[required]"
-              label="Name of book"
+              label="Tên sách"
               required
               clearable
               variant="outlined"
@@ -21,7 +21,7 @@
             <v-text-field
               v-model="formData.author"
               :rules="[required]"
-              label="Author of book"
+              label="Tác giả"
               required
               clearable
               variant="outlined"
@@ -32,7 +32,7 @@
             ></v-text-field>
             <v-select
               v-model="formData.category_id"
-              label="Category"
+              label="Danh mục"
               :rules="[required]"
               :items="categoryList"
               item-title="name"
@@ -48,7 +48,7 @@
             <v-text-field
               v-model="formData.book_cover_url"
               :rules="[required, url]"
-              label="Book cover"
+              label="Bìa sách"
               variant="outlined"
               required
               clearable
@@ -60,21 +60,21 @@
             <v-text-field
               v-model="formData.price"
               :rules="[required, number]"
-              label="Price"
+              label="Giá"
               variant="outlined"
               required
               clearable
               density="compact"
               base-color="primary"
               color="primary"
-              prefix="$"
+              suffix="VNĐ"
               class="mb-3"
             ></v-text-field>
             <v-text-field
               v-model="formData.stock"
               :rules="[required, number]"
               type="number"
-              label="Stock"
+              label="Số lượng nhập"
               variant="outlined"
               required
               clearable
@@ -86,7 +86,7 @@
             ></v-text-field>
             <v-textarea
               v-model="formData.description"
-              label="Description"
+              label="Mô tả"
               variant="outlined"
               density="compact"
               base-color="primary"
@@ -99,7 +99,7 @@
                 color="primary"
                 type="submit"
                 :loading="loading"
-                >Submit</v-btn
+                >Thêm mới</v-btn
               >
             </div>
           </v-form>

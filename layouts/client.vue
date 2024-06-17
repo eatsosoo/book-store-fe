@@ -26,11 +26,11 @@
                 color="white"
                 rounded="pill"
                 class="mr-4"
-                >Log In</v-btn
+                >Đăng nhập</v-btn
               >
             </NuxtLink>
             <NuxtLink to="/register">
-              <v-btn color="white" rounded="pill">Sign Up</v-btn>
+              <v-btn color="white" rounded="pill">Đăng ký</v-btn>
             </NuxtLink>
           </div>
           <div v-else class="d-flex">

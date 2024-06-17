@@ -10,36 +10,34 @@
           <v-col lg="3" md="6" sm="6" class="d-flex align-center mt-10 mb-10">
             <div class="Badge"><v-icon>mdi-moped</v-icon></div>
             <div>
-              <p class="Title">Quick Delivery</p>
+              <p class="Title">Vận chuyển nhanh</p>
               <p class="Content">
-                Swift delivery to your doorstep in just 10 rapid days!
+                Giao hàng nhanh chóng đến tận nhà bạn chỉ trong 10 ngày nhanh chóng!
               </p>
             </div>
           </v-col>
           <v-col lg="3" md="6" sm="6" class="d-flex align-center mt-10 mb-10">
             <div class="Badge"><v-icon>mdi-credit-card-marker</v-icon></div>
             <div>
-              <p class="Title">Secure Payment</p>
+              <p class="Title">Thanh toán an toàn</p>
               <p class="Content">
-                Shop confidently with out secure payment for worry-free
-                transactions
+                Tự tin mua sắm với phương thức thanh toán an toàn của chúng tôi để bạn không phải lo lắng khi giao dịch.
               </p>
             </div>
           </v-col><v-col lg="3" md="6" sm="6" class="d-flex align-center mt-10 mb-10">
             <div class="Badge"><v-icon>mdi-shield-star</v-icon></div>
             <div>
-              <p class="Title">Best Quality</p>
+              <p class="Title">Chất lượng tốt nhất</p>
               <p class="Content">
-                Unsurpassed excellence, delivering the epitome of premium
-                quality products
+                Sự xuất sắc vượt trội, mang đến hình ảnh thu nhỏ của sản phẩm chất lượng cao cấp.
               </p>
             </div>
           </v-col><v-col lg="3" md="6" sm="6" class="d-flex align-center mt-10 mb-10">
             <div class="Badge"><v-icon>mdi-hand-heart</v-icon></div>
             <div class="Wrap">
-              <p class="Title">Return Guarantee</p>
+              <p class="Title">Đảm bảo hoàn trả</p>
               <p class="Content">
-                Swift delivery to your doorstep in just 10 rapid days!
+                10 ngày đổi trả thoải mái. Đảm bảo hoàn lại tiền 100%.
               </p>
             </div>
           </v-col>
@@ -50,7 +48,7 @@
     <v-container>
       <v-row>
         <v-col cols="12" class="d-flex align-center">
-          <h1 class="flex-shrink-0 mr-5">View All Categories</h1>
+          <h1 class="flex-shrink-0 mr-5">Xem tất cả danh mục</h1>
           <hr class="w-100" />
         </v-col>
       </v-row>
@@ -73,7 +71,7 @@
     <v-container>
       <v-row>
         <v-col cols="12" class="d-flex align-center">
-          <h1 class="flex-shrink-0 mr-5">Featured Books</h1>
+          <h1 class="flex-shrink-0 mr-5">Sách nổi bật</h1>
           <hr class="w-100" />
         </v-col>
       </v-row>
@@ -86,7 +84,7 @@
               <div>
                 <p class="Author">{{ featuredBook.user_name }}</p>
                 <p class="Title">{{ featuredBook.name }}</p>
-                <p class="Price">${{ featuredBook.price }}</p>
+                <p class="Price">{{ featuredBook.price }} VNĐ</p>
               </div>
             </div>
           </NuxtLink>
@@ -98,7 +96,7 @@
     <v-container>
       <v-row>
         <v-col cols="12" class="d-flex align-center">
-          <h1 class="flex-shrink-0 mr-5">Bestselling Books</h1>
+          <h1 class="flex-shrink-0 mr-5">Sách bán chạy nhất</h1>
           <hr class="w-100" />
         </v-col>
       </v-row>
@@ -111,7 +109,7 @@
               <div>
                 <p class="Author">{{ bestSeller.user_name }}</p>
                 <p class="Title">{{ bestSeller.name }}</p>
-                <p class="Price">${{ bestSeller.price }}</p>
+                <p class="Price">{{ bestSeller.price }} VNĐ</p>
               </div>
             </div>
           </NuxtLink>

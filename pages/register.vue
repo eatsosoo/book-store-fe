@@ -14,7 +14,7 @@
     ></v-img>
 
       <v-form v-model="form" @submit.prevent="onSubmit">
-        <div class="text-subtitle-1 text-medium-emphasis">Username</div>
+        <div class="text-subtitle-1 text-medium-emphasis">Tên người dùng</div>
 
         <v-text-field
           v-model="registerForm.name"
@@ -26,7 +26,7 @@
           base-color="primary"
         ></v-text-field>
 
-        <div class="text-subtitle-1 text-medium-emphasis">Account</div>
+        <div class="text-subtitle-1 text-medium-emphasis">Email</div>
 
         <v-text-field
           v-model="registerForm.email"
@@ -41,7 +41,7 @@
         <div
           class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
         >
-          Password
+          Mật khẩu
         </div>
 
         <v-text-field
@@ -67,12 +67,12 @@
           block
           type="submit"
         >
-          Sign Up
+          Đăng ký
         </v-btn>
 
         <v-card-text class="text-center">
           <NuxtLink class="text-primary text-decoration-none" to="/login">
-            Log in now <v-icon icon="mdi-chevron-right"></v-icon>
+            Đăng nhập ngay <v-icon icon="mdi-chevron-right"></v-icon>
           </NuxtLink>
         </v-card-text>
       </v-form>

@@ -13,7 +13,7 @@
       src="https://cdn.dribbble.com/userupload/6810642/file/original-45a54e0571ae13ce154f565f49615607.png?resize=400x0"
     ></v-img>
 
-      <div class="text-subtitle-1 text-medium-emphasis">Account</div>
+      <div class="text-subtitle-1 text-medium-emphasis">Tài khoản</div>
 
       <v-text-field
         v-model="loginForm.email"
@@ -26,7 +26,7 @@
       <div
         class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
       >
-        Password
+        Mật khẩu
 
         <a
           class="text-caption text-decoration-none text-primary"
@@ -34,7 +34,7 @@
           rel="noopener noreferrer"
           target="_blank"
         >
-          Forgot login password?</a
+          Quên mật khẩu?</a
         >
       </div>
 
@@ -50,7 +50,7 @@
       ></v-text-field>
 
       <v-btn class="mb-8 mt-8" color="primary" size="large" variant="elevated" block @click="login">
-        Log In
+        Đăng nhập
       </v-btn>
 
       <v-card-text class="text-center">
@@ -58,7 +58,7 @@
           class="text-primary text-decoration-none"
           to="/register"
         >
-          Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
+          Đăng ký ngay <v-icon icon="mdi-chevron-right"></v-icon>
         </NuxtLink>
       </v-card-text>
     </v-card>
@@ -84,7 +84,7 @@ const login = async () => {
     const { data: responseData } = await api<ResponseResultType>(`/auth/login`);
     
     if (!responseData) {
-      toastError('Something wrong. Please try again later.')
+      toastError('Có lỗi xảy ra. Vui lòng thử lại sau.')
     }
 
     if (responseData.value) {

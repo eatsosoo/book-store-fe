@@ -1,6 +1,6 @@
 <template>
   <div class="AdminProducts">
-    <h1 class="text-capitalize">products</h1>
+    <h1 class="text-capitalize">sản phẩm</h1>
 
     <div class="pa-5 bg-white rounded-lg mt-5 BoxShadow">
       <v-data-table-server
@@ -9,6 +9,8 @@
         :items="pageState.items"
         :items-length="pageState.totalItems"
         :loading="pageState.loading"
+        items-per-page-text="Sản phẩm mỗi trang"
+        no-data-text="Không có sản phẩm nào"
         item-value="name"
         class="DataTableHeight"
         @update:options="loadItems"
@@ -30,12 +32,12 @@
     </div>
 
     <v-dialog v-model="dialog" max-width="400" persistent>
-      <v-card :text="questionDelete" title="Confirmation">
+      <v-card :text="questionDelete" title="Xác nhận">
         <template v-slot:actions>
           <v-spacer></v-spacer>
 
           <v-btn @click="dialog = false" color="primary" variant="elevated">
-            Cancel
+            Huỷ
           </v-btn>
 
           <v-btn
@@ -43,7 +45,7 @@
             color="primary"
             variant="outlined"
           >
-            Confirm
+            OK
           </v-btn>
         </template>
       </v-card>
@@ -72,11 +74,11 @@ const DEFAULT_HEADERS = [
     align: "start",
     key: "id",
   },
-  { title: "Book name", key: "name", align: "start" },
-  { title: "Author", key: "user_name", align: "start" },
-  { title: "Category", key: "category_name", align: "start" },
-  { title: "Price ($)", key: "price", align: "center" },
-  { title: "Stock", key: "stock", align: "center" },
+  { title: "Tên sách", key: "name", align: "start" },
+  { title: "Tác giá", key: "user_name", align: "start" },
+  { title: "Danh mục", key: "category_name", align: "start" },
+  { title: "Giá (VNĐ)", key: "price", align: "center" },
+  { title: "Sản phẩm còn (Quyển)", key: "stock", align: "center" },
   { title: "", key: "actions", align: "center" },
 ];
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
@@ -94,9 +96,9 @@ const editDialog = ref(false);
 
 const questionDelete = computed(() => {
   if (pageState.deleteItem) {
-    return `Are you sure you want to delete ${pageState.deleteItem.name}?`;
+    return `Bạn có chắc chắn muốn xoá cuốn sách: ${pageState.deleteItem.name}?`;
   }
-  return "Are you sure you want to delete this book?";
+  return "Bạn có chắc chắn muốn xoá sản phảm này?";
 });
 
 const loadItems = async ({ page, itemsPerPage, sortBy }) => {

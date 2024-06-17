@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Overview</h1>
+        <h1>Tổng quát</h1>
         <!-- Add your admin page content here -->
     </div>
 </template>

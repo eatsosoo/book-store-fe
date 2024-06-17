@@ -25,38 +25,38 @@
         <v-divider></v-divider>
 
         <v-list density="compact" nav>
-          <NuxtLink to="/admin" class="Link">
+          <NuxtLink to="/" class="Link">
             <v-list-item
               prepend-icon="mdi-home-city"
-              title="Home"
+              title="Trang chủ"
               value="home"
             ></v-list-item>
           </NuxtLink>
           <NuxtLink to="/admin/orders" class="Link">
             <v-list-item
               prepend-icon="mdi-order-bool-ascending"
-              title="Orders"
+              title="Đơn hàng"
               value="orders"
             ></v-list-item>
           </NuxtLink>
           <NuxtLink to="/admin/products" class="Link">
             <v-list-item
               prepend-icon="mdi-package-variant-closed"
-              title="Products"
+              title="Sản phẩm"
               value="products"
             ></v-list-item>
           </NuxtLink>
           <NuxtLink to="/admin/add" class="Link">
             <v-list-item
               prepend-icon="mdi-plus-box-multiple"
-              title="New"
+              title="Thêm sản phẩm"
               value="new_product"
             ></v-list-item>
           </NuxtLink>
           <NuxtLink to="/admin/categories" class="Link">
             <v-list-item
               prepend-icon="mdi-view-list"
-              title="Categories"
+              title="Danh mục"
               value="categories"
             ></v-list-item>
           </NuxtLink>

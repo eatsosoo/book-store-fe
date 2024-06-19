@@ -178,12 +178,8 @@ const resetFormData = () => {
 
 const onSubmit = async () => {
   loading.value = true;
-  const { api } = useApi(undefined, "POST", null, formData);
+  const { api } = useApi(undefined, "POST", null, {...formData});
   const { data: responseData } = await api<ResponseResultType>(`/books`);
-
-  if (responseData) {
-    resetFormData();
-  }
 
   if (responseData.value) {
     const { result } = responseData.value;
@@ -191,12 +187,13 @@ const onSubmit = async () => {
 
     if (!result) {
       dialog.icon = "mdi-close-circle-outline";
-      dialog.message = "Failed to add book!";
-      dialog.title = "Error";
+      dialog.message = "Thêm sách thất bại!";
+      dialog.title = "Lỗi";
     } else {
       dialog.icon = "mdi-check-circle-outline";
-      dialog.message = "Book has been added successfully!";
-      dialog.title = "Completed";
+      dialog.message = "Thêm sách thành công!";
+      dialog.title = "Hoàn tất";
+      resetFormData();
     }
   }
 

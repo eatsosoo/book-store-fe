@@ -79,7 +79,7 @@ const DEFAULT_HEADERS = [
   { title: "Danh mục", key: "category_name", align: "start" },
   { title: "Giá (VNĐ)", key: "price", align: "center" },
   { title: "Sản phẩm còn (Quyển)", key: "stock", align: "center" },
-  { title: "", key: "actions", align: "center" },
+  { title: "", key: "actions", align: "center", sortable: false },
 ];
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 const pageState = reactive({

@@ -147,8 +147,12 @@
     </v-stepper>
 
     <v-card v-else>
-      <v-sheet>
-        <h1>Bạn đã đặt hàng thành công</h1>
+      <v-sheet class="pa-10 bg-primary d-flex justify-center flex-column align-center">
+        <p class="TitleOrderSuccess"><v-icon>mdi-check-circle</v-icon> Đặt hàng thành công</p>
+        <div class="mt-5">
+          <v-btn variant="outlined" class="mr-5" @click="$router.push('/')">Trang chủ</v-btn>
+          <v-btn variant="outlined">Đơn mua</v-btn>
+        </div>
       </v-sheet>
     </v-card>
 
@@ -321,5 +325,10 @@ const prevStep = () => {
 .ImageCartItem {
   width: 50px;
   margin-top: 5px;
+}
+
+.TitleOrderSuccess {
+  font-size: 24px;
+  font-weight: 500;
 }
 </style>

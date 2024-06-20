@@ -24,3 +24,22 @@ export const formatCurrency = (number: number) => {
     .replace("₫", "")
     .trim();
 };
+
+export const formatNumberPhone = (phone: string) => {
+  return phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+}
+
+export const convertStatus = (status: 'pending' | 'processing' | 'completed' | 'cancelled') => {
+  switch (status) {
+    case 'pending':
+      return 'Đang chờ xử lý';
+    case 'processing':
+      return 'Đang giao hàng';
+    case 'completed':
+      return 'Hoàn thành';
+    case 'cancelled':
+      return 'Đã hủy';
+    default:
+      return status;
+  }
+}

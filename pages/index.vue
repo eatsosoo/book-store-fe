@@ -82,8 +82,8 @@
             <div class="FeatureItem Bounce">
               <img :src="featuredBook.book_cover_url" class="FeatureImg" />
               <div>
-                <p class="Author">{{ featuredBook.author }}</p>
-                <p class="Title">{{ featuredBook.name }}</p>
+                <p class="Author TextWithEllipsis">{{ featuredBook.author }}</p>
+                <p class="Title TextWithEllipsis">{{ featuredBook.name }}</p>
                 <p class="Price">{{ formatCurrency(featuredBook.price) }} đ</p>
               </div>
             </div>
@@ -107,8 +107,8 @@
             <div class="FeatureItem Bounce">
               <img :src="bestSeller.book_cover_url" class="FeatureImg" />
               <div>
-                <p class="Author">{{ bestSeller.author }}</p>
-                <p class="Title">{{ bestSeller.name }}</p>
+                <p class="Author TextWithEllipsis">{{ bestSeller.author }}</p>
+                <p class="Title TextWithEllipsis">{{ bestSeller.name }}</p>
                 <p class="Price">{{ formatCurrency(bestSeller.price) }} đ</p>
               </div>
             </div>
@@ -290,5 +290,11 @@ loadItems();
     i {
         color: #a287d7;
     }
+}
+
+.TextWithEllipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

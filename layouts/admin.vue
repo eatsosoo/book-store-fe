@@ -25,41 +25,36 @@
         <v-divider></v-divider>
 
         <v-list density="compact" nav>
-          <NuxtLink to="/" class="Link">
-            <v-list-item
-              prepend-icon="mdi-home-city"
-              title="Trang chủ"
-              value="home"
-            ></v-list-item>
-          </NuxtLink>
-          <NuxtLink to="/admin/orders" class="Link">
-            <v-list-item
-              prepend-icon="mdi-order-bool-ascending"
-              title="Đơn hàng"
-              value="orders"
-            ></v-list-item>
-          </NuxtLink>
-          <NuxtLink to="/admin/products" class="Link">
-            <v-list-item
-              prepend-icon="mdi-package-variant-closed"
-              title="Sản phẩm"
-              value="products"
-            ></v-list-item>
-          </NuxtLink>
-          <NuxtLink to="/admin/add" class="Link">
-            <v-list-item
-              prepend-icon="mdi-plus-box-multiple"
-              title="Thêm sản phẩm"
-              value="new_product"
-            ></v-list-item>
-          </NuxtLink>
-          <NuxtLink to="/admin/categories" class="Link">
-            <v-list-item
-              prepend-icon="mdi-view-list"
-              title="Danh mục"
-              value="categories"
-            ></v-list-item>
-          </NuxtLink>
+          <v-list-item
+            prepend-icon="mdi-home-city"
+            title="Trang chủ"
+            value="home"
+            @click="$router.push('/')"
+          ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-order-bool-ascending"
+            title="Đơn hàng"
+            value="orders"
+            @click="$router.push('/admin/orders')"
+          ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-package-variant-closed"
+            title="Sản phẩm"
+            value="products"
+            @click="$router.push('/admin/products')"
+          ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-plus-box-multiple"
+            title="Thêm sản phẩm"
+            value="new_product"
+            @click="$router.push('/admin/add')"
+          ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-view-list"
+            title="Danh mục"
+            value="categories"
+            @click="$router.push('/admin/categories')"
+          ></v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-main class="BgMain">

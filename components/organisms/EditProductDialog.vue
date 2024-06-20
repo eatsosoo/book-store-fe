@@ -216,7 +216,6 @@ const loadDetail = async () => {
 };
 
 loadCategories();
-console.log(props);
 
 watch(
   () => props.active,

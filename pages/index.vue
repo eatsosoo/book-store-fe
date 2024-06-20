@@ -82,9 +82,9 @@
             <div class="FeatureItem Bounce">
               <img :src="featuredBook.book_cover_url" class="FeatureImg" />
               <div>
-                <p class="Author">{{ featuredBook.user_name }}</p>
+                <p class="Author">{{ featuredBook.author }}</p>
                 <p class="Title">{{ featuredBook.name }}</p>
-                <p class="Price">{{ featuredBook.price }} VNĐ</p>
+                <p class="Price">{{ formatCurrency(featuredBook.price) }} đ</p>
               </div>
             </div>
           </NuxtLink>
@@ -107,9 +107,9 @@
             <div class="FeatureItem Bounce">
               <img :src="bestSeller.book_cover_url" class="FeatureImg" />
               <div>
-                <p class="Author">{{ bestSeller.user_name }}</p>
+                <p class="Author">{{ bestSeller.author }}</p>
                 <p class="Title">{{ bestSeller.name }}</p>
-                <p class="Price">{{ bestSeller.price }} VNĐ</p>
+                <p class="Price">{{ formatCurrency(bestSeller.price) }} đ</p>
               </div>
             </div>
           </NuxtLink>
@@ -139,7 +139,7 @@ type BookType = {
   name: string;
   price: number;
   book_cover_url: string;
-  user_name: string;
+  author: string;
 };
 
 const categoryList = ref<CategoryType[]>([]);

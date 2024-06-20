@@ -73,5 +73,10 @@ export const useCartStore = defineStore("cart", {
     hasExistBookInCart(itemId: number) {
       return this.cart.items.some((item) => item.itemId === itemId);
     },
+
+    clearCart() {
+      this.cart.items = [];
+      localStorage.removeItem("cart");
+    },
   },
 });

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-stepper v-model="step">
+    <v-stepper v-if="!ordered" v-model="step">
       <template v-slot:default="{ prev, next }">
         <v-stepper-header>
           <v-stepper-item title="Xem trước đơn hàng" value="1" :complete="step > '1'" color="primary">
@@ -43,13 +43,13 @@
                         <v-btn color="primary" density="compact" icon="mdi-minus" @click="minusQuantity(index)"></v-btn>
                       </div>
                     </td>
-                    <td class="text-end" v-text="product.quantity * product.price"></td>
+                    <td class="text-end" v-text="formatCurrency(product.quantity * product.price)"></td>
                   </tr>
 
                   <tr>
                     <th>Tổng</th>
                     <th></th>
-                    <th class="text-end">{{ subtotal }} VNĐ</th>
+                    <th class="text-end">{{ formatCurrency(subtotal) }} đ</th>
                   </tr>
                 </tbody>
               </v-table>
@@ -59,10 +59,11 @@
           <v-stepper-window-item value="2">
             <h3 class="text-h6">Giao hàng</h3>
             <br />
-            <v-radio-group v-model="shipping.cost" label="Phương thức vận chuyển" color="primary">
-              <v-radio label="Vận chuyển tiêu chuẩn" value="5"></v-radio>
-              <v-radio label="Vận chuyển ưu tiên" value="10"></v-radio>
-              <v-radio label="Chuyển phát nhanh" value="15"></v-radio>
+            <v-radio-group v-model="shipping.cost" label="Phương thức vận chuyển (Thanh toán khi nhận hàng)"
+              color="primary">
+              <v-radio label="Vận chuyển tiêu chuẩn" value="15000"></v-radio>
+              <v-radio label="Vận chuyển ưu tiên" value="30000"></v-radio>
+              <v-radio label="Chuyển phát nhanh" value="45000"></v-radio>
             </v-radio-group>
             <h3 class="text-h6">Thông tin giao hàng</h3>
             <br />
@@ -95,21 +96,21 @@
                     </td>
                     <td v-text="product.name"></td>
                     <td class="text-end" v-text="product.quantity"></td>
-                    <td class="text-end" v-text="product.quantity * product.price"></td>
+                    <td class="text-end" v-text="formatCurrency(product.quantity * product.price) + ' đ'"></td>
                   </tr>
 
                   <tr>
                     <td>Phí giao hàng</td>
                     <td></td>
                     <td></td>
-                    <td class="text-end" v-text="shipping.cost"></td>
+                    <td class="text-end" v-text="formatCurrency(Number(shipping.cost)) + ' đ'"></td>
                   </tr>
 
                   <tr>
                     <th>Tổng</th>
                     <th></th>
                     <th></th>
-                    <th class="text-end">{{ total }} VNĐ</th>
+                    <th class="text-end">{{ formatCurrency(total) }} đ</th>
                   </tr>
                 </tbody>
               </v-table>
@@ -140,10 +141,16 @@
           </v-stepper-window-item>
         </v-stepper-window>
 
-        <v-stepper-actions color="primary" :disabled="disabled" @click:next="next"
-          @click:prev="prev"></v-stepper-actions>
+        <v-stepper-actions color="primary" :disabled="disabled" :next-text="step === '3' ? 'Đặt hàng' : 'Tiếp'" prev-text="Trước"
+          @click:next="nextStep" @click:prev="prevStep"></v-stepper-actions>
       </template>
     </v-stepper>
+
+    <v-card v-else>
+      <v-sheet>
+        <h1>Bạn đã đặt hàng thành công</h1>
+      </v-sheet>
+    </v-card>
 
     <v-dialog v-model="dialog" max-width="400" persistent>
       <v-card text="Are you sure you want to delete this item from your cart?" title="Confirmation">
@@ -165,17 +172,21 @@
 
 <script setup lang="ts">
 import { useCartStore } from "~/store/cartStore";
+import { useAuthStore } from "~/store/authStore";
+import { useApi, type ResponseResultType } from "~/composable/useApiFetch";
 
+const authStore = useAuthStore();
 const cartStore = useCartStore();
 const shipping = reactive({
-  cost: "5",
-  address: "",
-  phone: "",
+  cost: "15000",
+  address: authStore.profile?.address || "",
+  phone: authStore.profile?.phone || "",
   method: "CASH_ON_DELIVERY",
 });
 const step = ref("0");
 const dialog = ref(false);
 const deleteId = ref<number | null>(null);
+const ordered = ref(false);
 
 const subtotal = computed(() => {
   return products.value.reduce(
@@ -215,6 +226,10 @@ const disabled = computed(() => {
     return "next";
   }
 
+  if (step.value === "0") {
+    return "prev";
+  }
+
   return false;
 });
 
@@ -238,12 +253,62 @@ const deleteItem = (id: number | null) => {
   cartStore.removeCartItem(id);
   dialog.value = false;
 };
+
+const submitOrder = async () => {
+  const orderData = {
+    user_id: authStore.profile?.id,
+    status: 'pending',
+    total_amount: subtotal.value,
+    payment_method: 'CASH_ON_DELIVERY',
+    shipping_cost: Number(shipping.cost),
+    shipping_address: shipping.address,
+    items: products.value.map((product) => {
+      return {
+        book_id: product.itemId,
+        quantity: product.quantity,
+        price: product.price,
+        total: product.price * product.quantity,
+      };
+    }),
+  }
+  const { api } = useApi(undefined, "POST", null, orderData);
+  const { error } = await api<ResponseResultType>(
+    `/orders`
+  );
+
+  if (error.value) {
+    toastError("Đặt hàng thất bại");
+  } else {
+    toastSuccess("Đặt hàng thành công");
+    cartStore.clearCart();
+    ordered.value = true;
+  }
+};
+
+const nextStep = () => {
+  if (step.value === "0") {
+    step.value = "2";
+  } else if (step.value === "2") {
+    step.value = "3";
+  } else if (step.value === "3") {
+    submitOrder()
+  }
+};
+
+const prevStep = () => {
+  if (step.value === "3") {
+    step.value = "2";
+  } else if (step.value === "2") {
+    step.value = "0";
+  }
+};
 </script>
 
 <style lang="scss" scoped>
 .FontBold {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }
+
 .v-text-field {
   width: 300px;
 }

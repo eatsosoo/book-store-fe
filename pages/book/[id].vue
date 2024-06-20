@@ -15,8 +15,8 @@
             </v-col>
             <v-col cols="6">
               <h2>{{ bookDetail.name }}</h2>
-              <p class="mt-2">-- {{ bookDetail.user_name }} --</p>
-              <h2 class="mt-2">{{ bookDetail.price }} VNĐ</h2>
+              <p class="mt-2">-- {{ bookDetail.author }} --</p>
+              <h2 class="mt-2">{{ formatCurrency(bookDetail.price) }} đ</h2>
               <p class="mt-2 DescriptionDetail">{{ bookDetail.description }}</p>
 
               <div class="NumberInput">
@@ -70,15 +70,15 @@ const message = ref("");
 
 const bookDetail = ref({
   id: id as number,
-  name: "Book Name",
-  user_name: "Author Name",
+  name: "",
+  author: "",
   price: 0,
   stock: 0,
-  category_name: "Category",
-  created_at: "2021-09-01",
-  updated_at: "2021-09-01",
-  description: "Description",
-  book_cover_url: "https://via.placeholder.com/300",
+  category_name: "",
+  created_at: "",
+  updated_at: "",
+  description: "",
+  book_cover_url: "",
 });
 
 const addToCart = () => {

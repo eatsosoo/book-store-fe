@@ -1,6 +1,6 @@
 <template>
   <div class="ClientLayout">
-    <div class="BorderBottom bg-primary">
+    <div class="BorderBottom bg-primary Header">
       <v-container>
         <div class="d-flex justify-space-between align-center mt-3 mb-3">
           <NuxtLink to="/" class="Link">
@@ -155,6 +155,11 @@ const onClick = () => {
 </script>
 
 <style scoped lang="scss">
+.Header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 .Link {
     text-decoration: none;
     color: inherit;

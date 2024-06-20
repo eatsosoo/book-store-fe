@@ -7,11 +7,11 @@
       max-height="700"
       rounded="lg"
     >
-    <v-img
-      class="mx-auto my-6 rounded-circle"
-      max-width="150"
-      src="https://cdn.dribbble.com/userupload/6810642/file/original-45a54e0571ae13ce154f565f49615607.png?resize=400x0"
-    ></v-img>
+      <v-img
+        class="mx-auto my-6 rounded-circle"
+        max-width="150"
+        src="https://cdn.dribbble.com/userupload/6810642/file/original-45a54e0571ae13ce154f565f49615607.png?resize=400x0"
+      ></v-img>
 
       <div class="text-subtitle-1 text-medium-emphasis">Tài khoản</div>
 
@@ -49,15 +49,19 @@
         @click:append-inner="visible = !visible"
       ></v-text-field>
 
-      <v-btn class="mb-8 mt-8" color="primary" size="large" variant="elevated" block @click="login">
+      <v-btn
+        class="mb-8 mt-8"
+        color="primary"
+        size="large"
+        variant="elevated"
+        block
+        @click="login"
+      >
         Đăng nhập
       </v-btn>
 
       <v-card-text class="text-center">
-        <NuxtLink
-          class="text-primary text-decoration-none"
-          to="/register"
-        >
+        <NuxtLink class="text-primary text-decoration-none" to="/register">
           Đăng ký ngay <v-icon icon="mdi-chevron-right"></v-icon>
         </NuxtLink>
       </v-card-text>
@@ -80,27 +84,27 @@ const loginForm = reactive({
 });
 
 const login = async () => {
-    const { api } = useApi(undefined, "POST", null, loginForm);
-    const { data: responseData } = await api<ResponseResultType>(`/auth/login`);
-    
-    if (!responseData) {
-      toastError('Có lỗi xảy ra. Vui lòng thử lại sau.')
-    }
+  const { api } = useApi(undefined, "POST", null, { ...loginForm });
+  const { data: responseData } = await api<ResponseResultType>(`/auth/login`);
 
-    if (responseData.value) {
-      const { result, data } = responseData.value
-      if (result) {
-        toastSuccess(data.message)
-        
-        const newToken = data.access_token.split('|')[1]
-        localStorage.setItem('access_token', newToken)
-        store.setToken(newToken)
+  if (!responseData) {
+    toastError("Có lỗi xảy ra. Vui lòng thử lại sau.");
+  }
 
-        const  router = useRouter()
-        router.push('/')
-      } else {
-        toastError(data.message)
-      }
+  if (responseData.value) {
+    const { result, data } = responseData.value;
+    if (result) {
+      toastSuccess(data.message);
+
+      const newToken = data.access_token.split("|")[1];
+      localStorage.setItem("access_token", newToken);
+      store.setToken(newToken);
+
+      const router = useRouter();
+      router.push("/");
+    } else {
+      toastError(data.message);
     }
+  }
 };
 </script>

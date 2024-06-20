@@ -203,7 +203,7 @@ const loadDetail = async () => {
     const { book } = responseData.value.data;
     formData.id = book.id;
     formData.name = book.name;
-    formData.author = book.user_name;
+    formData.author = book.author;
     formData.user_id = book.user_id;
     formData.price = book.price;
     formData.stock = book.stock;

@@ -75,7 +75,7 @@ const DEFAULT_HEADERS = [
     key: "id",
   },
   { title: "Tên sách", key: "name", align: "start" },
-  { title: "Tác giá", key: "user_name", align: "start" },
+  { title: "Tác giá", key: "author", align: "start" },
   { title: "Danh mục", key: "category_name", align: "start" },
   { title: "Giá (VNĐ)", key: "price", align: "center" },
   { title: "Sản phẩm còn (Quyển)", key: "stock", align: "center" },

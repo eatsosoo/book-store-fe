@@ -151,7 +151,7 @@
         <p class="TitleOrderSuccess"><v-icon>mdi-check-circle</v-icon> Đặt hàng thành công</p>
         <div class="mt-5">
           <v-btn variant="outlined" class="mr-5" @click="$router.push('/')">Trang chủ</v-btn>
-          <v-btn variant="outlined">Đơn mua</v-btn>
+          <v-btn variant="outlined" @click="$emit('success')">Đơn mua</v-btn>
         </div>
       </v-sheet>
     </v-card>

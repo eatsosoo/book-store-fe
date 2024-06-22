@@ -3,11 +3,11 @@
     <v-container>
       <v-row>
         <v-col cols="12" class="d-flex align-center">
-          <h1 class="flex-shrink-0 mr-5">Book Detail</h1>
+          <h1 class="flex-shrink-0 mr-5">Sản phẩm</h1>
           <hr class="w-100" />
         </v-col>
       </v-row>
-      <v-row v-if="id" class="d-flex justify-center">
+      <v-row v-if="bookId" class="d-flex justify-center">
         <div class="BookDetailCard">
           <v-row>
             <v-col cols="6">
@@ -30,7 +30,7 @@
               <div class="mt-10">
                 <v-btn color="primary" :disabled="!quantity" @click="addToCart">
                   <v-icon class="mr-2">mdi-cart</v-icon>
-                  Add to Cart
+                  Thêm giỏ hàng
                 </v-btn>
               </div>
             </v-col>
@@ -41,6 +41,20 @@
         <v-col cols="12">
           <h1>Book is not exist</h1>
         </v-col>
+      </v-row>
+    </v-container>
+
+    <v-container>
+      <v-row>
+        <v-col cols="12" class="d-flex align-center">
+          <h1 class="flex-shrink-0 mr-5">Đánh giá</h1>
+          <hr class="w-100" />
+        </v-col>
+      </v-row>
+      <v-row v-if="bookId" class="d-flex justify-center">
+        <div class="BookDetailCard">
+          <Review :book-id="bookId"></Review>
+        </div>
       </v-row>
     </v-container>
 
@@ -63,13 +77,13 @@ definePageMeta({
 });
 
 const cartStore = useCartStore();
-const id = useRoute().params.id;
+const bookId = Number(useRoute().params.id);
 const quantity = ref(1);
 const dialog = ref(false);
 const message = ref("");
 
 const bookDetail = ref({
-  id: id as number,
+  id: bookId,
   name: "",
   author: "",
   price: 0,
@@ -99,13 +113,13 @@ const addToCart = () => {
   };
 
   cartStore.addToCart(cartItem);
-  message.value = "Add to cart successfully!";
+  message.value = "Thêm sách vào giỏ hàng thành công!";
 }
 
 const loadItem = async () => {
-  if (!id) return;
+  if (!bookId) return;
   const { api } = useApi(undefined, "GET", null, undefined);
-  const { data: responseData } = await api<ResponseResultType>(`/books/${id}`);
+  const { data: responseData } = await api<ResponseResultType>(`/books/${bookId}`);
 
   if (responseData.value) {
     const { book } = responseData.value.data;
@@ -123,7 +137,7 @@ loadItem();
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 50px 0;
-  max-width: 1000px;
+  width: 1000px;
 }
 
 .DescriptionDetail {

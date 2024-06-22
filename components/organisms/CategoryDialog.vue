@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="500" persistent>
     <v-card :loading="loading.detail" :disabled="loading.detail">
-      <div class="bg-primary py-2 px-3 d-flex justify-space-between">
+      <div class="bg-primary py-3 px-3 d-flex justify-space-between">
         <p>{{ props.categoryId !== "" ? "Cập nhât" : "Thêm mới" }} danh mục</p>
         <v-icon @click="close">mdi-close</v-icon>
       </div>

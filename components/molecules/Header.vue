@@ -1,65 +1,92 @@
 <template>
-    <div class="BorderBottom bg-primary Header">
-      <v-container>
-        <div class="d-flex justify-space-between align-center mt-3 mb-3">
-          <NuxtLink to="/" class="Link">
-            <p class="text-h4">Bookie</p>
-            <p>Website for books</p>
-          </NuxtLink>
-          <div class="Search">
-            <v-text-field
-              :loading="loading"
-              append-inner-icon="mdi-magnify"
-              density="compact"
-              label="Search books"
-              variant="solo"
-              hide-details
-              single-line
-              rounded="pill"
-            ></v-text-field>
+  <div class="BorderBottom bg-primary Header">
+    <v-container>
+      <div class="d-flex justify-space-between align-center mt-3 mb-3">
+        <NuxtLink to="/" class="Link">
+          <p class="text-h4">Bookie</p>
+          <p>Website for books</p>
+        </NuxtLink>
+        <div class="Search">
+          <v-text-field
+            :loading="loading"
+            append-inner-icon="mdi-magnify"
+            density="compact"
+            label="Tìm kiếm sách"
+            variant="solo"
+            hide-details
+            single-line
+            rounded="pill"
+          ></v-text-field>
+        </div>
+        <div v-if="!authStore.hasToken" class="d-flex">
+          <div class="position-relative">
+            <v-btn
+              icon="mdi-cart"
+              color="white"
+              density="comfortable"
+              @click="dialog2 = true"
+            ></v-btn>
+            <div class="position-absolute CartQuantity">{{ cartQuantity }}</div>
           </div>
-          <div v-if="!authStore.hasToken">
-              <v-btn
-                color="white"
-                rounded="pill"
-                class="mr-4"
-                @click="$router.push('/login')"
-                >Đăng nhập</v-btn
-              >
-              <v-btn color="white" rounded="pill" @click="$router.push('/register')">Đăng ký</v-btn>
+          <v-btn
+            color="white"
+            rounded="pill"
+            class="mr-4 ml-4"
+            @click="$router.push('/login')"
+            >Đăng nhập</v-btn
+          >
+          <v-btn color="white" rounded="pill" @click="$router.push('/register')"
+            >Đăng ký</v-btn
+          >
+        </div>
+        <div v-else class="d-flex">
+          <div class="position-relative">
+            <v-btn
+              icon="mdi-cart"
+              color="white"
+              density="comfortable"
+              @click="$router.push('/cart')"
+            ></v-btn>
+            <div class="position-absolute CartQuantity">{{ cartQuantity }}</div>
           </div>
-          <div v-else class="d-flex">
-            <div class="position-relative">
-                <v-btn
-                icon="mdi-cart"
-                color="white"
-                density="comfortable"
-                @click="$router.push('/cart')"
-                ></v-btn>
-              <div class="position-absolute CartQuantity">{{ cartQuantity }}</div>
-            </div>
-            <div>
-              <v-btn
-                icon="mdi-logout"
-                color="white"
-                density="comfortable"
-                class="ml-4"
-                @click="logout"
-              ></v-btn>
-            </div>
+          <div>
+            <v-btn
+              icon="mdi-logout"
+              color="white"
+              density="comfortable"
+              class="ml-4"
+              @click="dialog = true"
+            ></v-btn>
           </div>
         </div>
-      </v-container>
-    </div>
+      </div>
+    </v-container>
+
+    <Confirm
+      :active="dialog"
+      text="Bạn đang thực hiện đăng xuất?"
+      @accepted="logout"
+      @rejected="dialog = false"
+    ></Confirm>
+
+    <Confirm
+      :active="dialog2"
+      text="Vui lòng đăng nhặp để tiếp tục!"
+      @accepted="$router.push('/login')"
+      @rejected="dialog2 = false"
+    ></Confirm>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/store/authStore';
-import { useCartStore } from '~/store/cartStore';
+import { useAuthStore } from "~/store/authStore";
+import { useCartStore } from "~/store/cartStore";
 
 const authStore = useAuthStore();
 const cartStore = useCartStore();
 const loading = ref(false);
+const dialog = ref(false);
+const dialog2 = ref(false);
 const cartQuantity = computed(() => cartStore.cart.items.length);
 </script>
 
@@ -91,13 +118,11 @@ const cartQuantity = computed(() => cartStore.cart.items.length);
 }
 
 .Link {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 
-    i {
-        color: #a287d7;
-    }
+  i {
+    color: #a287d7;
+  }
 }
-
-
 </style>

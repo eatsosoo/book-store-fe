@@ -115,6 +115,8 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
 
   if (sortBy && sortBy.length) {
     sorting += "&sort=" + JSON.stringify(sortBy[0]);
+  } else {
+    sorting += "&sort=" + JSON.stringify(DEFAULT_SORT[0]);
   }
 
   const { data: responseData } = await api("/books?" + paging + sorting);

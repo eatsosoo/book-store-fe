@@ -85,10 +85,11 @@ const loginForm = reactive({
 
 const login = async () => {
   const { api } = useApi(undefined, "POST", null, { ...loginForm });
-  const { data: responseData } = await api<ResponseResultType>(`/auth/login`);
+  const { data: responseData, error } = await api<ResponseResultType>(`/auth/login`);
 
-  if (!responseData) {
-    toastError("Có lỗi xảy ra. Vui lòng thử lại sau.");
+  if (error.value) {
+    toastError(error.value.data.data.message);
+    return;
   }
 
   if (responseData.value) {
@@ -105,6 +106,8 @@ const login = async () => {
     } else {
       toastError(data.message);
     }
+  } else {
+    toastError("Có lỗi xảy ra. Vui lòng thử lại sau.");
   }
 };
 </script>

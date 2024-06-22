@@ -59,7 +59,7 @@
     </v-container>
 
     <v-dialog v-model="dialog" width="auto">
-      <v-card max-width="400" prepend-icon="mdi-update" :text="message" title="Update in progress">
+      <v-card max-width="400" prepend-icon="mdi-update" :text="message" title="Cập nhât quá trình">
         <template v-slot:actions>
           <v-btn class="ms-auto" text="Ok" variant="outlined" color="primary" @click="dialog = false"></v-btn>
         </template>

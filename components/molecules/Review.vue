@@ -19,6 +19,7 @@
                 color="orange-lighten-1"
                 readonly
                 density="compact"
+                half-increments
                 class="mr-4"
               ></v-rating>
             </div>

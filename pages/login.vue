@@ -21,6 +21,7 @@
         placeholder="Email address"
         prepend-inner-icon="mdi-email-outline"
         variant="outlined"
+        color="primary"
       ></v-text-field>
 
       <div
@@ -46,6 +47,7 @@
         placeholder="Enter your password"
         prepend-inner-icon="mdi-lock-outline"
         variant="outlined"
+        color="primary"
         @click:append-inner="visible = !visible"
       ></v-text-field>
 

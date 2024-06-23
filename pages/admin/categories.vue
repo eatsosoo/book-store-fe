@@ -9,18 +9,83 @@
     </div>
 
     <div class="pa-5 bg-white rounded-lg mt-5 BoxShadow">
+      <v-card class="mx-auto">
+        <v-card-text>
+          <v-row>
+            <v-col cols="3" class="mt-3 MarginFieldSearch"
+              >Tên danh mục</v-col
+            >
+            <v-col cols="4"
+              ><v-text-field
+                v-model="searchForm.categoryName"
+                :loading="pageState.loading"
+                density="compact"
+                variant="outlined"
+                hide-details
+                single-line
+                color="primary"
+              ></v-text-field
+            ></v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-row class="mt-2 mb-1">
+            <v-col cols="3"></v-col>
+            <v-col cols="4">
+              <v-btn
+                :loading="pageState.loading"
+                variant="outlined"
+                color="primary"
+                class="mx-2"
+                @click="resetSearchForm"
+                >Làm mới</v-btn
+              >
+              <v-btn
+                :loading="pageState.loading"
+                variant="elevated"
+                color="primary"
+                class="mx-2"
+                @click="
+                  loadItems({
+                    page: pageState.page,
+                    itemsPerPage: pageState.itemsPerPage,
+                    sortBy: pageState.sort,
+                  })
+                "
+                >Tìm kiếm</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </div>
+
+    <div class="pa-5 bg-white rounded-lg mt-5 BoxShadow">
       <v-data-table-server
         v-model:items-per-page="pageState.itemsPerPage"
         :headers="DEFAULT_HEADERS"
         :items="pageState.items"
         :items-length="pageState.totalItems"
         :loading="pageState.loading"
-        items-per-page-text="Sản phẩm mỗi trang"
+        items-per-page-text="Danh mục mỗi trang"
         no-data-text="Không có danh mục nào"
         item-value="name"
+        :fixed-header="true"
+        :items-per-page-options="[
+          { value: 10, title: '10' },
+          { value: 25, title: '25' },
+          { value: 50, title: '50' },
+          { value: 100, title: '100' },
+          { value: -1, title: 'Tất cả' },
+        ]"
+        :page-text="pageText"
         class="DataTableHeight"
         @update:options="loadItems"
+        @update:page="pageState.page = $event"
       >
+        <template v-slot:loading>
+          <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+        </template>
         <template #item.actions="{ item }">
           <v-icon
             class="mr-2"
@@ -85,6 +150,8 @@ const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 
 const pageState = reactive({
   itemsPerPage: 10,
+  page: 1,
+  totalPages: 0,
   loading: true,
   totalItems: 0,
   items: [],
@@ -92,8 +159,15 @@ const pageState = reactive({
   editId: "",
   sort: DEFAULT_SORT,
 });
+const searchForm = reactive({
+  categoryName: "",
+});
 const dialog = ref(false);
 const deleteDialog = ref(false);
+
+const pageText = computed(() => {
+  return `Trang ${pageState.page} / ${pageState.totalPages}`;
+});
 
 const loadItems = async ({ page, itemsPerPage, sortBy }) => {
   pageState.loading = true;
@@ -112,7 +186,8 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     sorting += "&sort=" + JSON.stringify(DEFAULT_SORT[0]);
   }
 
-  const { data: responseData } = await api("/categories?" + paging + sorting);
+  const params = `name=${encodeURIComponent(searchForm.categoryName)}`;
+  const { data: responseData } = await api(`/categories?${params}&` + paging + sorting);
 
   if (!responseData) {
     pageState.items = [];
@@ -122,6 +197,7 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     const { categories, pagination } = responseData.value.data;
     pageState.items = categories;
     pageState.totalItems = pagination.total;
+    pageState.totalItems = pagination.total_pages;
   }
 
   pageState.loading = false;
@@ -131,7 +207,7 @@ const deleteItem = async (id) => {
   if (!id) return;
 
   const { api } = useApi(undefined, "DELETE", null, undefined);
-  const { data: responseData, error } = await api(`/categories/${id}`);
+  const { error } = await api(`/categories/${id}`);
 
   if (error.value) {
     toastError("Có lỗi xảy ra. Vui lòng thử lại sau.");
@@ -141,5 +217,10 @@ const deleteItem = async (id) => {
   }
 
   deleteDialog.value = false;
+};
+
+const resetSearchForm = () => {
+  searchForm.categoryName = "";
+  loadItems({ page: 1, itemsPerPage: 10, sortBy: DEFAULT_SORT });
 };
 </script>

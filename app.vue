@@ -10,4 +10,8 @@
 body, .v-application {
   font-family: 'Roboto', sans-serif !important;
 }
+
+.v-field__input {
+  font-size: 14px;
+}
 </style>

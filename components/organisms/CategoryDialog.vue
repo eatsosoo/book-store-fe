@@ -18,6 +18,7 @@
                   clearable
                   variant="outlined"
                   density="compact"
+                  color="primary"
                   class="mb-3"
                 ></v-text-field>
 
@@ -29,6 +30,7 @@
                   required
                   clearable
                   density="compact"
+                  color="primary"
                   class="mb-3"
                 ></v-text-field>
               </div>

@@ -26,12 +26,6 @@
 
         <v-list density="compact" nav>
           <v-list-item
-            prepend-icon="mdi-home-city"
-            title="Trang chủ"
-            value="home"
-            @click="$router.push('/')"
-          ></v-list-item>
-          <v-list-item
             prepend-icon="mdi-order-bool-ascending"
             title="Đơn hàng"
             value="orders"
@@ -55,6 +49,12 @@
             value="categories"
             @click="$router.push('/admin/categories')"
           ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-home-city"
+            title="Về trang chủ"
+            value="home"
+            @click="$router.push('/')"
+          ></v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-main class="BgMain">
@@ -65,7 +65,7 @@
                 icon="mdi-logout"
                 color="primary"
                 class="ml-4"
-                @click="logout"
+                @click="dialog = true"
               ></v-btn>
             </div>
           </v-col>
@@ -77,6 +77,13 @@
         </v-container>
       </v-main>
     </v-layout>
+
+    <Confirm
+      :active="dialog"
+      text="Bạn đang thực hiện đăng xuất?"
+      @accepted="logout"
+      @rejected="dialog = false"
+    ></Confirm>
   </v-card>
 </template>
 <script setup>
@@ -84,6 +91,7 @@ import { ref } from "vue";
 
 const drawer = ref(true);
 const rail = ref(true);
+const dialog = ref(false);
 </script>
 
 <style lang="scss" scoped>
@@ -115,7 +123,7 @@ const rail = ref(true);
 }
 .BgMain {
   background-color: #f5f5f5;
-  height: 100vh;
+  min-height: 100vh;
 }
 .Wrapper {
   max-width: 1440px;

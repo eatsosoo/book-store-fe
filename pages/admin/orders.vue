@@ -3,73 +3,170 @@
     <h1 class="text-capitalize">đơn hàng</h1>
 
     <div class="pa-5 bg-white rounded-lg mt-5 BoxShadow">
-      <v-data-table-server
-        v-model:items-per-page="pageState.itemsPerPage"
-        :headers="DEFAULT_HEADERS"
-        :items="pageState.items"
-        :items-length="pageState.totalItems"
-        :loading="pageState.loading"
-        items-per-page-text="Đơn hàng mỗi trang"
-        no-data-text="Không có đơn hàng nào"
-        item-value="name"
-        class="DataTableHeight"
-        @update:options="loadItems"
-      >
-        <template #item.id="{ item }">
-          <span
-            class="text-light-blue cursor-pointer text-decoration-underline"
-            @click="(editDialog = true), (pageState.editId = `${item.id}`)"
-            >{{ item.id }}</span
-          >
-        </template>
-        <template #item.total_amount="{ item }">{{
-          formatCurrency(
-            Number(item.total_amount) + Number(item.shipping_cost)
-          ) + " đ"
-        }}</template>
-        <template #item.status="{ item }">
-          <v-chip :class="item.status">{{ convertStatus(item.status) }}</v-chip>
-        </template>
-        <template #item.actions="{ item }">
-          <v-btn
-            v-if="item.status === 'pending'"
-            class="mr-2"
-            color="blue"
-            icon="mdi-moped"
-            density="compact"
-            @click="
-              (statusDialog = true),
-                (pageState.targetId = `${item.id}`),
-                (pageState.targetStatus = 'processing')
-            "
-          >
-          </v-btn>
-          <v-btn
-            v-if="item.status === 'pending'"
-            class="mr-2"
-            color="red"
-            icon="mdi-close-thick"
-            density="compact"
-            @click="
-              (statusDialog = true),
-                (pageState.targetId = `${item.id}`),
-                (pageState.targetStatus = 'cancelled')
-            "
-          ></v-btn>
-          <v-btn
-            v-if="item.status === 'processing'"
-            class="mr-2"
-            color="green"
-            icon="mdi-check-bold"
-            density="compact"
-            @click="
-              (statusDialog = true),
-                (pageState.targetId = `${item.id}`),
-                (pageState.targetStatus = 'completed')
-            "
-          ></v-btn>
-        </template>
-      </v-data-table-server>
+      <v-card class="mx-auto">
+        <v-card-text>
+          <v-row>
+            <v-col cols="3" class="mt-3 MarginFieldSearch">Mã đơn hàng</v-col>
+            <v-col cols="4"
+              ><v-text-field
+                v-model="searchForm.orderCode"
+                :loading="pageState.loading"
+                density="compact"
+                variant="outlined"
+                hide-details
+                single-line
+                color="primary"
+              ></v-text-field
+            ></v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="3" class="mt-3 MarginFieldSearch"
+              >Tên khách hàng</v-col
+            >
+            <v-col cols="4"
+              ><v-text-field
+                v-model="searchForm.customerName"
+                :loading="pageState.loading"
+                density="compact"
+                variant="outlined"
+                hide-details
+                single-line
+                color="primary"
+              ></v-text-field
+            ></v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="3" class="mt-3 MarginFieldSearch">Số điện thoại</v-col>
+            <v-col cols="4"
+              ><v-text-field
+                v-model="searchForm.customerPhone"
+                :loading="pageState.loading"
+                density="compact"
+                variant="outlined"
+                hide-details
+                single-line
+                color="primary"
+              ></v-text-field
+            ></v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-row class="mt-2 mb-1">
+            <v-col cols="3"></v-col>
+            <v-col cols="4">
+              <v-btn
+                :loading="pageState.loading"
+                variant="outlined"
+                color="primary"
+                class="mx-2"
+                @click="resetSearchForm"
+                >Làm mới</v-btn
+              >
+              <v-btn
+                :loading="pageState.loading"
+                variant="elevated"
+                color="primary"
+                class="mx-2"
+                @click="
+                  loadItems({
+                    page: pageState.page,
+                    itemsPerPage: pageState.itemsPerPage,
+                    sortBy: pageState.sort,
+                  })
+                "
+                >Tìm kiếm</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </div>
+
+    <div class="pa-5 bg-white rounded-lg mt-5 BoxShadow">
+      <v-card class="mx-auto">
+        <v-data-table-server
+          v-model:items-per-page="pageState.itemsPerPage"
+          :headers="DEFAULT_HEADERS"
+          :items="pageState.items"
+          :items-length="pageState.totalItems"
+          :loading="pageState.loading"
+          items-per-page-text="Đơn hàng mỗi trang"
+          no-data-text="Không có đơn hàng nào"
+          item-value="name"
+          :fixed-header="true"
+          :items-per-page-options="[
+            { value: 10, title: '10' },
+            { value: 25, title: '25' },
+            { value: 50, title: '50' },
+            { value: 100, title: '100' },
+            { value: -1, title: 'Tất cả' },
+          ]"
+          :page-text="pageText"
+          class="DataTableHeight"
+          @update:options="loadItems"
+          @update:page="pageState.page = $event"
+        >
+          <template v-slot:loading>
+            <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+          </template>
+          <template #item.id="{ item }">
+            <span
+              class="text-light-blue cursor-pointer text-decoration-underline"
+              @click="(editDialog = true), (pageState.editId = `${item.id}`)"
+              >{{ item.id }}</span
+            >
+          </template>
+          <template #item.total_amount="{ item }">{{
+            formatCurrency(
+              Number(item.total_amount) + Number(item.shipping_cost)
+            ) + " đ"
+          }}</template>
+          <template #item.status="{ item }">
+            <v-chip :class="item.status">{{
+              convertStatus(item.status)
+            }}</v-chip>
+          </template>
+          <template #item.actions="{ item }">
+            <v-btn
+              v-if="item.status === 'pending'"
+              class="mr-2"
+              color="blue"
+              icon="mdi-moped"
+              density="compact"
+              @click="
+                (statusDialog = true),
+                  (pageState.targetId = `${item.id}`),
+                  (pageState.targetStatus = 'processing')
+              "
+            >
+            </v-btn>
+            <v-btn
+              v-if="item.status === 'pending'"
+              class="mr-2"
+              color="red"
+              icon="mdi-close-thick"
+              density="compact"
+              @click="
+                (statusDialog = true),
+                  (pageState.targetId = `${item.id}`),
+                  (pageState.targetStatus = 'cancelled')
+              "
+            ></v-btn>
+            <v-btn
+              v-if="item.status === 'processing'"
+              class="mr-2"
+              color="green"
+              icon="mdi-check-bold"
+              density="compact"
+              @click="
+                (statusDialog = true),
+                  (pageState.targetId = `${item.id}`),
+                  (pageState.targetStatus = 'completed')
+              "
+            ></v-btn>
+          </template>
+        </v-data-table-server>
+      </v-card>
     </div>
 
     <Confirm
@@ -118,6 +215,8 @@ const DEFAULT_HEADERS = [
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 const pageState = reactive({
   itemsPerPage: 10,
+  page: 1,
+  totalPages: 0,
   loading: true,
   totalItems: 0,
   items: [],
@@ -126,6 +225,11 @@ const pageState = reactive({
   editId: "",
   sort: DEFAULT_SORT,
 });
+const searchForm = reactive({
+  orderCode: "",
+  customerName: "",
+  customerPhone: "",
+});
 const editDialog = ref(false);
 const statusDialog = ref(false);
 
@@ -133,6 +237,10 @@ const orderCode = computed(() => {
   return pageState.items.find(
     (item) => item.id.toString() === pageState.targetId
   )?.order_code;
+});
+
+const pageText = computed(() => {
+  return `${pageState.page} / ${pageState.totalPages}`;
 });
 
 const questionCancel = computed(() => {
@@ -157,7 +265,7 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
   let sorting = "";
 
   if (page && itemsPerPage) {
-    paging = "pagination=" + JSON.stringify({ page, per_page: itemsPerPage });
+    paging = "&pagination=" + JSON.stringify({ page, per_page: itemsPerPage });
   }
 
   if (sortBy && sortBy.length) {
@@ -166,7 +274,11 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     sorting += "&sort=" + JSON.stringify(DEFAULT_SORT[0]);
   }
 
-  const { data: responseData } = await api("/orders?" + paging + sorting);
+  const params = `order_code=${searchForm.orderCode}&customer_name=${searchForm.customerName}&customer_phone=${searchForm.customerPhone}`;
+
+  const { data: responseData } = await api(
+    `/orders?${params}` + paging + sorting
+  );
 
   if (!responseData) {
     pageState.items = [];
@@ -176,6 +288,7 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     const { orders, pagination } = responseData.value.data;
     pageState.items = orders;
     pageState.totalItems = pagination.total;
+    pageState.totalPages = pagination.total_pages;
   }
 
   pageState.loading = false;
@@ -209,22 +322,42 @@ const updateStatusOrder = async (id) => {
 
   statusDialog.value = false;
 };
+
+const resetSearchForm = () => {
+  searchForm.orderCode = "";
+  searchForm.customerName = "";
+  searchForm.customerPhone = "";
+
+  loadItems({
+    page: 1,
+    itemsPerPage: 10,
+    sortBy: DEFAULT_SORT,
+  });
+};
 </script>
 
 <style scoped>
 .DataTableHeight {
   max-height: 650px;
 }
+
 .pending {
   color: #ff9800;
 }
+
 .processing {
   color: #2196f3;
 }
+
 .completed {
   color: #4caf50;
 }
+
 .cancelled {
   color: #f44336;
+}
+
+.MarginFieldSearch {
+  /* padding-left: 200px; */
 }
 </style>

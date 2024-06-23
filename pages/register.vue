@@ -7,12 +7,7 @@
       max-height="700"
       rounded="lg"
     >
-    <v-img
-      class="mx-auto my-6 rounded-circle"
-      max-width="150"
-      src="https://cdn.dribbble.com/userupload/6810642/file/original-45a54e0571ae13ce154f565f49615607.png?resize=400x0"
-    ></v-img>
-
+      <h1 class="mb-2">Đăng ký tài khoản</h1>
       <v-form v-model="form" @submit.prevent="onSubmit">
         <div class="text-subtitle-1 text-medium-emphasis">Tên người dùng</div>
 
@@ -20,10 +15,10 @@
           v-model="registerForm.name"
           :rules="[required]"
           density="compact"
-          placeholder="username"
           prepend-inner-icon="mdi-account-circle"
           variant="outlined"
           base-color="primary"
+          color="primary"
         ></v-text-field>
 
         <div class="text-subtitle-1 text-medium-emphasis">Email</div>
@@ -32,10 +27,10 @@
           v-model="registerForm.email"
           :rules="[required, email]"
           density="compact"
-          placeholder="Email address"
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
           base-color="primary"
+          color="primary"
         ></v-text-field>
 
         <div
@@ -50,11 +45,35 @@
           :type="visible ? 'text' : 'password'"
           :rules="[required, minLength(registerForm.password, 6)]"
           density="compact"
-          placeholder="Enter your password"
           prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
           base-color="primary"
+          color="primary"
           @click:append-inner="visible = !visible"
+        ></v-text-field>
+
+        <div class="text-subtitle-1 text-medium-emphasis">Địa chỉ</div>
+
+        <v-text-field
+          v-model="registerForm.address"
+          :rules="[required]"
+          density="compact"
+          prepend-inner-icon="mdi-map-marker"
+          variant="outlined"
+          base-color="primary"
+          color="primary"
+        ></v-text-field>
+
+        <div class="text-subtitle-1 text-medium-emphasis">Số điện thoại</div>
+
+        <v-text-field
+          v-model="registerForm.phone"
+          :rules="[required, telephone]"
+          density="compact"
+          prepend-inner-icon="mdi-phone"
+          variant="outlined"
+          base-color="primary"
+          color="primary"
         ></v-text-field>
 
         <v-btn
@@ -91,12 +110,16 @@ const registerForm = reactive({
   name: "",
   email: "",
   password: "",
+  address: "",
+  phone: "",
 });
 
 const reset = () => {
   registerForm.name = "";
   registerForm.email = "";
   registerForm.password = "";
+  registerForm.address = "";
+  registerForm.phone = "";
 };
 
 const onSubmit = async () => {

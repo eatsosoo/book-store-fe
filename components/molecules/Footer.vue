@@ -54,7 +54,7 @@
             </h1>
             <div class="d-flex">
               <v-text-field
-                label="Email Address"
+                label="Địa chỉ Email"
                 variant="outlined"
                 rounded="lg"
                 class="mr-2"

@@ -1,46 +1,70 @@
 <template>
   <div class="MyOrders">
-    <v-data-table-server
-      v-model:items-per-page="pageState.itemsPerPage"
-      :headers="DEFAULT_HEADERS"
-      :items="pageState.items"
-      :items-length="pageState.totalItems"
-      :loading="pageState.loading"
-      items-per-page-text="Đơn hàng mỗi trang"
-      no-data-text="Không có đơn hàng nào"
-      item-value="name"
-      class="DataTableHeight"
-      @update:options="loadItems"
-    >
-      <template #item.order_code="{ item }">
-        <span
-          class="text-light-blue cursor-pointer text-decoration-underline"
-          @click="(editDialog = true), (pageState.editId = `${item.id}`)"
-          >{{ item.order_code }}</span
+    <v-expansion-panels>
+      <v-expansion-panel>
+        <v-expansion-panel-title color="primary"
+          >Tìm kiếm đơn hàng</v-expansion-panel-title
         >
-      </template>
-      <template #item.total_amount="{ item }">{{
-        formatCurrency(Number(item.total_amount) + Number(item.shipping_cost)) +
-        " đ"
-      }}</template>
-      <template #item.status="{ item }">
-        <v-chip :class="item.status">{{ convertStatus(item.status) }}</v-chip>
-      </template>
-      <template #item.actions="{ item }">
-        <v-btn
-          v-if="item.status === 'pending'"
-          class="mr-2"
-          color="red"
-          icon="mdi-close-thick"
-          density="compact"
-          @click="
-            (statusDialog = true),
-              (pageState.targetId = `${item.id}`),
-              (pageState.targetStatus = 'cancelled')
-          "
-        ></v-btn>
-      </template>
-    </v-data-table-server>
+        <v-expansion-panel-text>
+          <SearchFormOrder
+            :loading="pageState.loading"
+            @orderCode="searchForm.orderCode = $event"
+            @customerName="searchForm.customerName = $event"
+            @customerPhone="searchForm.customerPhone = $event"
+            @status="searchForm.status = $event"
+            @dateRange="searchForm.dateRange = $event"
+            @reset="resetSearchForm"
+            @search="loadItems({ page: pageState.page, itemsPerPage: pageState.itemsPerPage, sortBy: pageState.sort })"
+          ></SearchFormOrder>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
+
+    <v-card class="mt-10">
+      <v-data-table-server
+        v-model:items-per-page="pageState.itemsPerPage"
+        :headers="DEFAULT_HEADERS"
+        :items="pageState.items"
+        :items-length="pageState.totalItems"
+        :loading="pageState.loading"
+        items-per-page-text="Đơn hàng mỗi trang"
+        no-data-text="Không có đơn hàng nào"
+        item-value="name"
+        class="DataTableHeight"
+        @update:options="loadItems"
+        @update:page="pageState.page = $event"
+      >
+        <template #item.order_code="{ item }">
+          <span
+            class="text-light-blue cursor-pointer text-decoration-underline"
+            @click="(editDialog = true), (pageState.editId = `${item.id}`)"
+            >{{ item.order_code }}</span
+          >
+        </template>
+        <template #item.total_amount="{ item }">{{
+          formatCurrency(
+            Number(item.total_amount) + Number(item.shipping_cost)
+          ) + " đ"
+        }}</template>
+        <template #item.status="{ item }">
+          <v-chip :class="item.status">{{ convertStatus(item.status) }}</v-chip>
+        </template>
+        <template #item.actions="{ item }">
+          <v-btn
+            v-if="item.status === 'pending'"
+            class="mr-2"
+            color="red"
+            icon="mdi-close-thick"
+            density="compact"
+            @click="
+              (statusDialog = true),
+                (pageState.targetId = `${item.id}`),
+                (pageState.targetStatus = 'cancelled')
+            "
+          ></v-btn>
+        </template>
+      </v-data-table-server>
+    </v-card>
 
     <Confirm
       :active="statusDialog"
@@ -59,9 +83,20 @@
 
 <script setup lang="ts">
 import { computed, reactive } from "vue";
-import { useApi } from "@/composable/useApiFetch";
+import { useApi, type ResponseResultType } from "@/composable/useApiFetch";
 import OrderDialog from "~/components/organisms/OrderDialog.vue";
 import { useAuthStore } from "~/store/authStore";
+import SearchFormOrder from "./SearchFormOrder.vue";
+
+export type OrderItem = {
+  id: number;
+  order_code: string;
+  customer_name: string;
+  customer_phone: string;
+  total_amount: number;
+  status: string;
+  created_at: string;
+};
 
 const DEFAULT_HEADERS = [
   {
@@ -70,7 +105,7 @@ const DEFAULT_HEADERS = [
     key: "id",
   },
   { title: "Mã đơn hàng", key: "order_code", align: "start" },
-  { title: "Tên người nhận", key: "customer_name", align: "start"},
+  { title: "Tên người nhận", key: "customer_name", align: "start" },
   { title: "Số điện thoại", key: "customer_phone", align: "start" },
   { title: "Tổng đơn hàng (VNĐ)", key: "total_amount", align: "center" },
   { title: "Trạng thái", key: "status", align: "center" },
@@ -82,10 +117,11 @@ const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 const authStore = useAuthStore();
 
 const pageState = reactive({
+  page: 1,
   itemsPerPage: 10,
   loading: true,
   totalItems: 0,
-  items: [],
+  items: [] as OrderItem[],
   targetId: "",
   targetStatus: "",
   editId: "",
@@ -93,6 +129,13 @@ const pageState = reactive({
 });
 const editDialog = ref(false);
 const statusDialog = ref(false);
+const searchForm = reactive({
+  orderCode: "",
+  customerName: "",
+  customerPhone: "",
+  status: "",
+  dateRange: []
+});
 
 const orderCode = computed(() => {
   return pageState.items.find(
@@ -113,7 +156,7 @@ const questionCancel = computed(() => {
   }
 });
 
-const loadItems = async ({ page, itemsPerPage, sortBy }) => {
+const loadItems = async ({ page, itemsPerPage, sortBy }: { page: number, itemsPerPage: number; sortBy: any[]}) => {
   pageState.loading = true;
 
   const { api } = useApi(undefined, "GET", null, undefined);
@@ -130,7 +173,19 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     sorting += "&sort=" + JSON.stringify(DEFAULT_SORT[0]);
   }
 
-  const { data: responseData } = await api(`/orders?user_id=${authStore.profile.id}&` + paging + sorting);
+  let created_at = "from=&to=";
+  if (searchForm.dateRange) {
+    created_at = convertDateRange(searchForm.dateRange);
+  }
+
+  const params = `order_code=${searchForm.orderCode}
+  &customer_name=${searchForm.customerName}
+  &customer_phone=${searchForm.customerPhone}
+  &status=${searchForm.status}&${created_at}`;
+
+  const { data: responseData } = await api<ResponseResultType>(
+    `/orders?user_id=${authStore.profile.id}&` + paging + sorting + "&" + params
+  );
 
   if (!responseData) {
     pageState.items = [];
@@ -145,7 +200,7 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
   pageState.loading = false;
 };
 
-const updateStatusOrder = async (id) => {
+const updateStatusOrder = async (id: string) => {
   if (!id) return;
 
   const { api } = useApi(undefined, "POST", null, {
@@ -172,6 +227,16 @@ const updateStatusOrder = async (id) => {
   }
 
   statusDialog.value = false;
+};
+
+const resetSearchForm = () => {
+  searchForm.orderCode = "";
+  searchForm.customerName = "";
+  searchForm.customerPhone = "";
+  searchForm.status = "";
+  searchForm.dateRange = [];
+
+  loadItems({ page: 1, itemsPerPage: 10, sortBy: DEFAULT_SORT });
 };
 </script>
 

@@ -59,7 +59,12 @@
           <v-stepper-window-item value="2">
             <h3 class="text-h6">Giao hàng</h3>
             <br />
-            <v-radio-group v-model="shipping.cost" label="Phương thức vận chuyển (Thanh toán khi nhận hàng)"
+            <v-radio-group v-model="shipping.method" label="Phương thức thanh toán"
+              color="primary">
+              <v-radio label="CODE" value="CASH_ON_DELIVERY"></v-radio>
+              <v-radio label="QR Thanh toán" value="QR_CODE"></v-radio>
+            </v-radio-group>
+            <v-radio-group v-model="shipping.cost" label="Phương thức vận chuyển"
               color="primary">
               <v-radio label="Vận chuyển tiêu chuẩn" value="15000"></v-radio>
               <v-radio label="Vận chuyển ưu tiên" value="30000"></v-radio>
@@ -80,6 +85,9 @@
 
           <v-stepper-window-item value="3">
             <h3 class="text-h6">Confirm</h3>
+            <div class="text-center">
+              <img v-if="qrCodeUrl && shipping.method === 'QR_CODE'" :src="qrCodeUrl" class="QrCodeImage"></img>
+            </div>
             <br />
             <v-sheet border>
               <v-table>
@@ -200,6 +208,7 @@ const step = ref("0");
 const dialog = ref(false);
 const deleteId = ref<number | null>(null);
 const ordered = ref(false);
+const qrCodeUrl = ref<string | null>(null);
 
 const subtotal = computed(() => {
   return products.value.reduce(
@@ -300,10 +309,34 @@ const submitOrder = async () => {
   }
 };
 
+const getQrCode = () => {
+  const accountName = 'TRAN DUY PHONG';
+  const amount = total.value;
+  const addInfo = 'Thanh toan hoa don';
+  const BANK_ID = '970415';
+  const ACCOUNT_NUMBER = '104877268898';
+  return `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NUMBER}-compact.png?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`
+
+  // const { api } = useApi(undefined, "GET", null, undefined);
+  // const { data, error } = await api<ResponseResultType>(
+  //   url
+  // );
+  // console.log(data, error);
+  
+  // if (error.value) {
+  //   toastError("Tạo mã QR thất bại");
+  // } else {
+  //   qrCodeUrl.value = data;
+  // }
+};
+
 const nextStep = () => {
   if (step.value === "0") {
     step.value = "2";
   } else if (step.value === "2") {
+    if (shipping.method === "QR_CODE") {
+      qrCodeUrl.value = getQrCode();
+    }
     step.value = "3";
   } else if (step.value === "3") {
     submitOrder()
@@ -341,5 +374,9 @@ const prevStep = () => {
 .TitleOrderSuccess {
   font-size: 24px;
   font-weight: 500;
+}
+
+.QrCodeImage {
+  width: 300px;
 }
 </style>

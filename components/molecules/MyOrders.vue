@@ -12,11 +12,11 @@
       class="DataTableHeight"
       @update:options="loadItems"
     >
-      <template #item.id="{ item }">
+      <template #item.order_code="{ item }">
         <span
           class="text-light-blue cursor-pointer text-decoration-underline"
           @click="(editDialog = true), (pageState.editId = `${item.id}`)"
-          >{{ item.id }}</span
+          >{{ item.order_code }}</span
         >
       </template>
       <template #item.total_amount="{ item }">{{
@@ -70,7 +70,8 @@ const DEFAULT_HEADERS = [
     key: "id",
   },
   { title: "Mã đơn hàng", key: "order_code", align: "start" },
-  { title: "Số điện thoại", key: "user_phone", align: "start" },
+  { title: "Tên người nhận", key: "customer_name", align: "start"},
+  { title: "Số điện thoại", key: "customer_phone", align: "start" },
   { title: "Tổng đơn hàng (VNĐ)", key: "total_amount", align: "center" },
   { title: "Trạng thái", key: "status", align: "center" },
   { title: "Ngày tạo", key: "created_at", align: "center" },

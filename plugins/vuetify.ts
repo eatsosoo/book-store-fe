@@ -3,6 +3,7 @@ import "@mdi/font/css/materialdesignicons.css";
 import { VNumberInput } from "vuetify/labs/VNumberInput";
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
+import { VDateInput } from 'vuetify/labs/VDateInput'
 
 const myCustomLightTheme = {
   dark: false,
@@ -39,6 +40,7 @@ export default defineNuxtPlugin((app) => {
     },
     components: {
       VNumberInput,
+      VDateInput,
     },
   });
   app.vueApp.use(vuetify);

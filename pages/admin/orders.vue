@@ -49,6 +49,36 @@
               ></v-text-field
             ></v-col>
           </v-row>
+          <v-row>
+            <v-col cols="3" class="mt-3 MarginFieldSearch">Trạng thái</v-col>
+            <v-col cols="4"
+              ><v-select
+                v-model="searchForm.status"
+                :loading="pageState.loading"
+                :items="STATUS_SEARCH"
+                item-title="text"
+                item-value="value"
+                density="compact"
+                variant="outlined"
+                hide-details
+                single-line
+                color="primary"
+              ></v-select
+            ></v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="3" class="mt-3 MarginFieldSearch">Ngày tạo</v-col>
+            <v-col cols="4">
+              <v-date-input
+                v-model="searchForm.dateRange"
+                clearable
+                variant="outlined"
+                color="primary"
+                density="compact"
+                multiple="range"
+              ></v-date-input>
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-row class="mt-2 mb-1">
@@ -109,11 +139,11 @@
           <template v-slot:loading>
             <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
           </template>
-          <template #item.id="{ item }">
+          <template #item.order_code="{ item }">
             <span
               class="text-light-blue cursor-pointer text-decoration-underline"
               @click="(editDialog = true), (pageState.editId = `${item.id}`)"
-              >{{ item.id }}</span
+              >{{ item.order_code }}</span
             >
           </template>
           <template #item.total_amount="{ item }">{{
@@ -200,8 +230,8 @@ const DEFAULT_HEADERS = [
     key: "id",
   },
   { title: "Mã đơn hàng", key: "order_code", align: "start" },
-  { title: "Tên khách hàng", key: "user_name", align: "start" },
-  { title: "Số điện thoại", key: "user_phone", align: "start" },
+  { title: "Tên người nhận", key: "customer_name", align: "start" },
+  { title: "Số điện thoại", key: "customer_phone", align: "start" },
   { title: "Tổng đơn hàng (VNĐ)", key: "total_amount", align: "center" },
   { title: "Trạng thái", key: "status", align: "center" },
   { title: "Ngày tạo", key: "created_at", align: "center" },
@@ -211,6 +241,13 @@ const DEFAULT_HEADERS = [
     align: "center",
     sortable: false,
   },
+];
+const STATUS_SEARCH = [
+  { text: "Tất cả", value: "" },
+  { text: "Chờ xử lý", value: "pending" },
+  { text: "Đang xử lý", value: "processing" },
+  { text: "Đã hoàn thành", value: "completed" },
+  { text: "Đã huỷ", value: "cancelled" },
 ];
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 const pageState = reactive({
@@ -229,6 +266,8 @@ const searchForm = reactive({
   orderCode: "",
   customerName: "",
   customerPhone: "",
+  status: "",
+  dateRange: null,
 });
 const editDialog = ref(false);
 const statusDialog = ref(false);
@@ -274,7 +313,12 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     sorting += "&sort=" + JSON.stringify(DEFAULT_SORT[0]);
   }
 
-  const params = `order_code=${searchForm.orderCode}&customer_name=${searchForm.customerName}&customer_phone=${searchForm.customerPhone}`;
+  let created_at = "from=&to=";
+  if (searchForm.dateRange) {
+    created_at = convertDateRange(searchForm.dateRange);
+  }
+
+  const params = `order_code=${searchForm.orderCode}&customer_name=${searchForm.customerName}&customer_phone=${searchForm.customerPhone}&status=${searchForm.status}&${created_at}`;
 
   const { data: responseData } = await api(
     `/orders?${params}` + paging + sorting

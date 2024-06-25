@@ -12,13 +12,15 @@ export const useApi = (
 ) => {
   const config = useRuntimeConfig();
 
+  const bearerToken = token || localStorage.getItem("access_token");
+
   const api: typeof useFetch = (url) => {
     return useFetch(url, {
       params: query,
       baseURL: config.public.apiUrl + "/api",
       key: url.toString(),
       method: method,
-      headers: token ? [["Authorization", "Bearer " + token]] : [],
+      headers: token ? [["Authorization", "Bearer " + token]] : [["Authorization", "Bearer " + bearerToken]],
       body: formData,
     });
   };

@@ -85,6 +85,7 @@
       v-for="review in pageState.items"
       :key="review.id"
       class="ReviewCommentItem"
+      v-if="pageState.items.length > 0"
     >
       <v-row>
         <v-col cols="4" class="d-flex">
@@ -108,6 +109,9 @@
           <p class="ml-2 mt-2 ReviewContent">{{ review.content }}</p>
         </v-col>
       </v-row>
+    </div>
+    <div v-else class="ReviewCommentItem text-center pt-5 text-grey">
+      <h3>Không có đánh giá nào</h3>
     </div>
   </div>
 </template>

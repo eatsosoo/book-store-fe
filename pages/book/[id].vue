@@ -25,7 +25,7 @@
                     base-color="primary" color="primary" hide-details density="compact" :min="1"
                     :max="bookDetail.stock"></v-number-input>
                 </div>
-                <h5 class="ml-2">Stock: {{ bookDetail.stock }}</h5>
+                <h5 class="ml-2">Số lượng sản phẩm: {{ bookDetail.stock }}</h5>
               </div>
               <div class="mt-10">
                 <v-btn color="primary" :disabled="!quantity" @click="addToCart">
@@ -39,7 +39,7 @@
       </v-row>
       <v-row v-else>
         <v-col cols="12">
-          <h1>Book is not exist</h1>
+          <h1>Sách không tồn tại</h1>
         </v-col>
       </v-row>
     </v-container>

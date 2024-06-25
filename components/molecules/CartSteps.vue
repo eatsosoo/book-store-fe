@@ -67,10 +67,13 @@
             </v-radio-group>
             <h3 class="text-h6">Thông tin giao hàng</h3>
             <br />
-            <v-text-field v-model="shipping.address" :rules="[required]" label="Address" density="compact"
+            <v-text-field v-model="shipping.customer_name" :rules="[required]" label="Tên người nhận" density="compact"
               variant="outlined" hide-details color="primary" class="mx-4"></v-text-field>
             <br />
-            <v-text-field v-model="shipping.phone" :rules="[required, telephone]" label="Tel number" density="compact"
+            <v-text-field v-model="shipping.address" :rules="[required]" label="Địa chỉ" density="compact"
+              variant="outlined" hide-details color="primary" class="mx-4"></v-text-field>
+            <br />
+            <v-text-field v-model="shipping.customer_phone" :rules="[required, telephone]" label="Số điện thoại" density="compact"
               variant="outlined" color="primary" class="mx-4"></v-text-field>
             <br />
           </v-stepper-window-item>
@@ -127,13 +130,18 @@
 
                 <tbody>
                   <tr>
+                    <th>Tên người nhận</th>
+                    <th class="text-end">{{ shipping.customer_name }}</th>
+                  </tr>
+
+                  <tr>
                     <th>Địa chỉ</th>
                     <th class="text-end">{{ shipping.address }}</th>
                   </tr>
 
                   <tr>
                     <th>Số điện thoại</th>
-                    <th class="text-end">{{ shipping.phone }}</th>
+                    <th class="text-end">{{ shipping.customer_phone }}</th>
                   </tr>
                 </tbody>
               </v-table>
@@ -183,8 +191,9 @@ const authStore = useAuthStore();
 const cartStore = useCartStore();
 const shipping = reactive({
   cost: "15000",
+  customer_name: authStore.profile?.name || "",
   address: authStore.profile?.address || "",
-  phone: authStore.profile?.phone || "",
+  customer_phone: authStore.profile?.phone || "",
   method: "CASH_ON_DELIVERY",
 });
 const step = ref("0");
@@ -217,11 +226,11 @@ const disabled = computed(() => {
   const pattern = /^\d{10}$/;
 
   if (step.value === "2") {
-    if (!shipping.address || !shipping.phone) {
+    if (!shipping.address || !shipping.customer_phone || !shipping.customer_name) {
       return "next";
     }
 
-    if (!pattern.test(shipping.phone)) {
+    if (!pattern.test(shipping.customer_phone)) {
       return "next";
     }
   }
@@ -264,6 +273,8 @@ const submitOrder = async () => {
     status: 'pending',
     total_amount: subtotal.value,
     payment_method: 'CASH_ON_DELIVERY',
+    customer_name: shipping.customer_name,
+    customer_phone: shipping.customer_phone,
     shipping_cost: Number(shipping.cost),
     shipping_address: shipping.address,
     items: products.value.map((product) => {

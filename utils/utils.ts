@@ -15,7 +15,11 @@ export const logout = async () => {
   await api<ResponseResultType>(`/auth/logout`);
 
   store.removeToken();
+  store.removeProfile();
+  store.removeRoleAndPermissions();
   localStorage.removeItem("access_token");
+
+  return navigateTo("/login");
 };
 
 export const formatCurrency = (number: number) => {
@@ -61,3 +65,8 @@ const formatDate = (date: string) => {
   const day = ("0" + d.getDate()).slice(-2);
   return `${year}-${month}-${day}`;
 };
+
+export const authLimited = (permission: string) => {
+  const store = useAuthStore();
+  return store.permissions.includes(permission);
+}

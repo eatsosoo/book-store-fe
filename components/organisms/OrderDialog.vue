@@ -79,7 +79,7 @@
                 <tbody>
                   <tr>
                     <th>Tên khách hàng</th>
-                    <th class="text-end">{{ formData.user_name }}</th>
+                    <th class="text-end">{{ formData.customer_name }}</th>
                   </tr>
 
                   <tr>
@@ -89,7 +89,7 @@
 
                   <tr>
                     <th>Số điện thoại</th>
-                    <th class="text-end">{{ formData.user_phone }}</th>
+                    <th class="text-end">{{ formData.customer_phone }}</th>
                   </tr>
                 </tbody>
               </v-table>
@@ -132,8 +132,8 @@ import { useAuthStore } from "~/store/authStore";
 interface OrderDetail {
   id: number;
   user_id: number;
-  user_name: string;
-  user_phone: string;
+  customer_name: string;
+  customer_phone: string;
   order_code: string;
   status: string;
   total_amount: string;

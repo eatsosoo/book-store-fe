@@ -93,7 +93,7 @@
             @click="(dialog = true), (pageState.editId = `${item.id}`)"
             >mdi-pencil</v-icon
           >
-          <v-icon color="primary" @click="(deleteDialog = true), (pageState.deleteId = `${item.id}`)">mdi-delete</v-icon>
+          <v-icon v-if="authLimited(CATEGORY_DELETE)" color="primary" @click="(deleteDialog = true), (pageState.deleteId = `${item.id}`)">mdi-delete</v-icon>
         </template>
       </v-data-table-server>
     </div>
@@ -151,7 +151,7 @@ const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 const pageState = reactive({
   itemsPerPage: 10,
   page: 1,
-  totalPages: 0,
+  totalPages: 1,
   loading: true,
   totalItems: 0,
   items: [],
@@ -197,7 +197,7 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     const { categories, pagination } = responseData.value.data;
     pageState.items = categories;
     pageState.totalItems = pagination.total;
-    pageState.totalItems = pagination.total_pages;
+    pageState.totalPages = pagination.total_pages;
   }
 
   pageState.loading = false;

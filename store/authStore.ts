@@ -16,6 +16,8 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     accessToken: '',
     profile: {} as User,
+    role: '',
+    permissions: [] as string[],
   }),
   getters: {
     hasToken: (state) => {
@@ -40,6 +42,14 @@ export const useAuthStore = defineStore('auth', {
     },
     removeProfile() {
       this.profile = {} as User
+    },
+    setRoleAndPermissions(role: string, permissions: string[]) {
+      this.role = role
+      this.permissions = permissions
+    },
+    removeRoleAndPermissions() {
+      this.role = ''
+      this.permissions = []
     },
   },
 })

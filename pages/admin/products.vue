@@ -109,6 +109,7 @@
           <template v-slot:loading>
             <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
           </template>
+          <template #item.price="{ item }">{{ formatCurrency(item.price) }} đ</template>
           <template #item.actions="{ item }">
             <v-icon
               class="mr-2 mt-1"
@@ -117,6 +118,7 @@
               >mdi-pencil</v-icon
             >
             <v-icon
+              v-if="authLimited(PRODUCT_DELETE)"
               class="mr-2 mt-1"
               color="primary"
               @click="(dialog = true), (pageState.deleteItem = item)"

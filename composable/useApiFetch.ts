@@ -30,12 +30,12 @@ export const useApi = (
 
 export const isAuthorized = async (accessToken: string) => {
   const { api } = useApi(undefined, "GET", accessToken, undefined);
-  const { error } = await api<ResponseResultType>(`/auth/is_authorized`);
+  const { error, data } = await api<ResponseResultType>(`/auth/is_authorized`);
 
   if (error.value) {
     return false;
   }
-  return true;
+  return data.value;
 }
 
 export const getProfile = async (accessToken: string) => {
@@ -46,5 +46,5 @@ export const getProfile = async (accessToken: string) => {
     return null;
   }
   
-  return data.value.data;
+  return data.value?.data;
 }

@@ -20,13 +20,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     } else if (token && to.path === "/login") {
       return navigateTo("/");
     } else if (token && to.path !== "/login") {
-      const isAuth = await isAuthorized(token);
+      const authData = await isAuthorized(token);
       const store = useAuthStore();
 
-      if (!isAuth) {
+      if (!authData) {
         localStorage.removeItem("access_token");
         store.removeToken();
         store.removeProfile();
+        store.removeRoleAndPermissions();
         return navigateTo("/login");
       }
 
@@ -40,6 +41,23 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           store.setProfile(profile as User);
         }
       }
+
+      const { role, permissions } = authData.data;
+      store.setRoleAndPermissions(role, permissions);
+
+      // Prevent infinite redirect by checking if the current path is not already the target path
+      if (role === "admin" && from.path.startsWith("/login") && to.path !== "/admin") {
+        return navigateTo("/admin");
+      }
+
+      if (role === "employee" && from.path.startsWith("/login") && to.path !== "/admin") {
+        return navigateTo("/admin");
+      }
+
+      if (role === "user" && to.path.startsWith("/admin") && to.path !== "/") {
+        return navigateTo("/");
+      }
+
       return;
     }
   }

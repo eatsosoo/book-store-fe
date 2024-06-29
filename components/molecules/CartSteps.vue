@@ -173,16 +173,16 @@
     </v-card>
 
     <v-dialog v-model="dialog" max-width="400" persistent>
-      <v-card text="Are you sure you want to delete this item from your cart?" title="Confirmation">
+      <v-card text="Bạn muốn xoá sản phẩm khỏi giỏ hàng không?" title="Confirmation">
         <template v-slot:actions>
           <v-spacer></v-spacer>
 
           <v-btn @click="dialog = false" color="primary" variant="elevated">
-            Cancel
+            Huỷ
           </v-btn>
 
           <v-btn @click="deleteItem(deleteId)" color="primary" variant="outlined">
-            Confirm
+            OK
           </v-btn>
         </template>
       </v-card>

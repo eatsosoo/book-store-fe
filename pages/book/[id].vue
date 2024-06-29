@@ -99,7 +99,7 @@ const addToCart = () => {
   dialog.value = true;
 
   if (cartStore.hasExistBookInCart(bookDetail.value.id)) {
-    message.value = "This book has been added to your cart.";
+    message.value = "Sách đã tồn tại trong giỏ hàng!";
     return;
   }
 

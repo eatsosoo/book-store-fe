@@ -2,6 +2,10 @@ import { getProfile, isAuthorized } from "~/composable/useApiFetch";
 import { useAuthStore, type User } from "~/store/authStore";
 import { useCartStore } from "~/store/cartStore";
 
+const ADMIN = 1;
+const EMPLOYEE = 2;
+const USER = 3;
+
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const cartStore = useCartStore();
   const cartStorage = localStorage.getItem("cart");
@@ -46,15 +50,15 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       store.setRoleAndPermissions(role, permissions);
 
       // Prevent infinite redirect by checking if the current path is not already the target path
-      if (role === "admin" && from.path.startsWith("/login") && to.path !== "/admin") {
+      if (role === ADMIN && from.path.startsWith("/login") && to.path !== "/admin") {
         return navigateTo("/admin");
       }
 
-      if (role === "employee" && from.path.startsWith("/login") && to.path !== "/admin") {
+      if (role === EMPLOYEE && from.path.startsWith("/login") && to.path !== "/admin") {
         return navigateTo("/admin");
       }
 
-      if (role === "user" && to.path.startsWith("/admin") && to.path !== "/") {
+      if (role === USER && to.path.startsWith("/admin") && to.path !== "/") {
         return navigateTo("/");
       }
 

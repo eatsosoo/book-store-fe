@@ -34,7 +34,6 @@
                   variant="outlined"
                   density="compact"
                   class="mb-3"
-                  disabled
                 ></v-text-field>
                 <v-select
                   v-model="formData.category_id"

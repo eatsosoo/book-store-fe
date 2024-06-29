@@ -17,6 +17,21 @@
         ></v-col>
       </v-row>
       <v-row>
+        <v-col cols="3" class="mt-3 MarginFieldSearch">Tên sách</v-col>
+        <v-col cols="4"
+          ><v-text-field
+            v-model="searchForm.book_name"
+            :loading="props.loading"
+            density="compact"
+            variant="outlined"
+            hide-details
+            single-line
+            color="primary"
+            @update:model-value="$emit('bookName', $event)"
+          ></v-text-field
+        ></v-col>
+      </v-row>
+      <v-row>
         <v-col cols="3" class="mt-3 MarginFieldSearch">Tên khách hàng</v-col>
         <v-col cols="4"
           ><v-text-field
@@ -114,16 +129,16 @@ const props = defineProps({
 });
 
 const STATUS_SEARCH = [
-  { text: "Tất cả", value: ""},
-  { text: "Chờ xác nhận", value: "pending" },
-  { text: "Đã xác nhận", value: "confirmed" },
-  { text: "Đang giao hàng", value: "shipping" },
-  { text: "Đã giao hàng", value: "delivered" },
-  { text: "Đã hủy", value: "cancelled" },
+  { text: "Tất cả", value: "" },
+  { text: "Chờ xử lý", value: "pending" },
+  { text: "Đang xử lý", value: "processing" },
+  { text: "Đã hoàn thành", value: "completed" },
+  { text: "Đã huỷ", value: "cancelled" },
 ];
 
 const searchForm = reactive({
   orderCode: "",
+  book_name: "",
   customerName: "",
   customerPhone: "",
   status: "",
@@ -132,6 +147,7 @@ const searchForm = reactive({
 
 const reset = () => {
   searchForm.orderCode = "";
+  searchForm.book_name = "";
   searchForm.customerName = "";
   searchForm.customerPhone = "";
   searchForm.status = "";

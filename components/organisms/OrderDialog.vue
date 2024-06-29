@@ -212,7 +212,6 @@ const loadDetail = async () => {
 };
 
 const close = () => {
-  formData.value = {} as OrderDetail;
   dialog.value = false;
   emits("close");
 };

@@ -1,14 +1,15 @@
 <template>
   <div class="MyOrders">
-    <v-expansion-panels>
+    <!-- <v-expansion-panels>
       <v-expansion-panel>
         <v-expansion-panel-title color="primary"
           >Tìm kiếm đơn hàng</v-expansion-panel-title
         >
-        <v-expansion-panel-text>
+        <v-expansion-panel-text> -->
           <SearchFormOrder
             :loading="pageState.loading"
             @orderCode="searchForm.orderCode = $event"
+            @bookName="searchForm.book_name = $event"
             @customerName="searchForm.customerName = $event"
             @customerPhone="searchForm.customerPhone = $event"
             @status="searchForm.status = $event"
@@ -16,9 +17,9 @@
             @reset="resetSearchForm"
             @search="loadItems({ page: pageState.page, itemsPerPage: pageState.itemsPerPage, sortBy: pageState.sort })"
           ></SearchFormOrder>
-        </v-expansion-panel-text>
+        <!-- </v-expansion-panel-text>
       </v-expansion-panel>
-    </v-expansion-panels>
+    </v-expansion-panels> -->
 
     <v-card class="mt-10">
       <v-data-table-server
@@ -27,6 +28,7 @@
         :items="pageState.items"
         :items-length="pageState.totalItems"
         :loading="pageState.loading"
+        :page-text="pageText"
         items-per-page-text="Đơn hàng mỗi trang"
         no-data-text="Không có đơn hàng nào"
         item-value="name"
@@ -110,7 +112,7 @@ const DEFAULT_HEADERS = [
   { title: "Tổng đơn hàng (VNĐ)", key: "total_amount", align: "center" },
   { title: "Trạng thái", key: "status", align: "center" },
   { title: "Ngày tạo", key: "created_at", align: "center" },
-  { title: "", key: "actions", align: "center" },
+  { title: "", key: "actions", align: "center", sortable: false },
 ];
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 
@@ -119,6 +121,7 @@ const authStore = useAuthStore();
 const pageState = reactive({
   page: 1,
   itemsPerPage: 10,
+  totalPages: 1,
   loading: true,
   totalItems: 0,
   items: [] as OrderItem[],
@@ -131,6 +134,7 @@ const editDialog = ref(false);
 const statusDialog = ref(false);
 const searchForm = reactive({
   orderCode: "",
+  book_name: "",
   customerName: "",
   customerPhone: "",
   status: "",
@@ -141,6 +145,10 @@ const orderCode = computed(() => {
   return pageState.items.find(
     (item) => item.id.toString() === pageState.targetId
   )?.order_code;
+});
+
+const pageText = computed(() => {
+  return `${pageState.page} / ${pageState.totalPages}`;
 });
 
 const questionCancel = computed(() => {
@@ -181,7 +189,8 @@ const loadItems = async ({ page, itemsPerPage, sortBy }: { page: number, itemsPe
   const params = `order_code=${searchForm.orderCode}
   &customer_name=${searchForm.customerName}
   &customer_phone=${searchForm.customerPhone}
-  &status=${searchForm.status}&${created_at}`;
+  &status=${searchForm.status}&${created_at}
+  &book_name=${searchForm.book_name}`;
 
   const { data: responseData } = await api<ResponseResultType>(
     `/orders?user_id=${authStore.profile.id}&` + paging + sorting + "&" + params
@@ -195,6 +204,7 @@ const loadItems = async ({ page, itemsPerPage, sortBy }: { page: number, itemsPe
     const { orders, pagination } = responseData.value.data;
     pageState.items = orders;
     pageState.totalItems = pagination.total;
+    pageState.totalPages = pagination.total_pages;
   }
 
   pageState.loading = false;
@@ -231,6 +241,7 @@ const updateStatusOrder = async (id: string) => {
 
 const resetSearchForm = () => {
   searchForm.orderCode = "";
+  searchForm.book_name = "";
   searchForm.customerName = "";
   searchForm.customerPhone = "";
   searchForm.status = "";

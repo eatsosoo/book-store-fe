@@ -129,7 +129,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useApi } from "@/composable/useApiFetch";
 import CategoryDialog from "~/components/organisms/CategoryDialog.vue";
 

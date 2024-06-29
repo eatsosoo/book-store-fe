@@ -16,7 +16,7 @@
               color="deep-purple-accent-4"
             >
               <v-tab :value="1">Giỏ hàng</v-tab>
-              <v-tab :value="2">Đơn hàng</v-tab>
+              <v-tab :value="2">Lịch sử đơn hàng</v-tab>
             </v-tabs>
 
             <v-tabs-window v-model="tab">

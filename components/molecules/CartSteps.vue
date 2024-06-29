@@ -61,7 +61,7 @@
             <br />
             <v-radio-group v-model="shipping.method" label="Phương thức thanh toán"
               color="primary">
-              <v-radio label="CODE" value="CASH_ON_DELIVERY"></v-radio>
+              <v-radio label="COD" value="CASH_ON_DELIVERY"></v-radio>
               <v-radio label="QR Thanh toán" value="QR_CODE"></v-radio>
             </v-radio-group>
             <v-radio-group v-model="shipping.cost" label="Phương thức vận chuyển"
@@ -73,10 +73,10 @@
             <h3 class="text-h6">Thông tin giao hàng</h3>
             <br />
             <v-text-field v-model="shipping.customer_name" :rules="[required]" label="Tên người nhận" density="compact"
-              variant="outlined" hide-details color="primary" class="mx-4"></v-text-field>
+              variant="outlined" color="primary" class="mx-4"></v-text-field>
             <br />
             <v-text-field v-model="shipping.address" :rules="[required]" label="Địa chỉ" density="compact"
-              variant="outlined" hide-details color="primary" class="mx-4"></v-text-field>
+              variant="outlined" color="primary" class="mx-4"></v-text-field>
             <br />
             <v-text-field v-model="shipping.customer_phone" :rules="[required, telephone]" label="Số điện thoại" density="compact"
               variant="outlined" color="primary" class="mx-4"></v-text-field>
@@ -167,7 +167,7 @@
         <p class="TitleOrderSuccess"><v-icon>mdi-check-circle</v-icon> Đặt hàng thành công</p>
         <div class="mt-5">
           <v-btn variant="outlined" class="mr-5" @click="$router.push('/')">Trang chủ</v-btn>
-          <v-btn variant="outlined" @click="$emit('success')">Đơn mua</v-btn>
+          <v-btn variant="outlined" @click="$emit('success')">Lịch sử đơn hàng</v-btn>
         </div>
       </v-sheet>
     </v-card>
@@ -310,24 +310,12 @@ const submitOrder = async () => {
 };
 
 const getQrCode = () => {
-  const accountName = 'TRAN DUY PHONG';
+  const accountName = 'NGUYEN THI HONG DUYEN';
   const amount = total.value;
   const addInfo = 'Thanh toan hoa don';
-  const BANK_ID = '970415';
-  const ACCOUNT_NUMBER = '104877268898';
+  const BANK_ID = '970407';
+  const ACCOUNT_NUMBER = '19035950613016';
   return `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NUMBER}-compact.png?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`
-
-  // const { api } = useApi(undefined, "GET", null, undefined);
-  // const { data, error } = await api<ResponseResultType>(
-  //   url
-  // );
-  // console.log(data, error);
-  
-  // if (error.value) {
-  //   toastError("Tạo mã QR thất bại");
-  // } else {
-  //   qrCodeUrl.value = data;
-  // }
 };
 
 const nextStep = () => {

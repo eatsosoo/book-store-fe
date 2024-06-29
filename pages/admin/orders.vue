@@ -6,6 +6,7 @@
       <SearchFormOrder
         :loading="pageState.loading"
         @orderCode="searchForm.orderCode = $event"
+        @bookName="searchForm.book_name = $event"
         @customerName="searchForm.customerName = $event"
         @customerPhone="searchForm.customerPhone = $event"
         @status="searchForm.status = $event"
@@ -123,7 +124,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, reactive } from "vue";
 import { useApi } from "@/composable/useApiFetch";
 import OrderDialog from "~/components/organisms/OrderDialog.vue";
@@ -151,13 +152,6 @@ const DEFAULT_HEADERS = [
     sortable: false,
   },
 ];
-const STATUS_SEARCH = [
-  { text: "Tất cả", value: "" },
-  { text: "Chờ xử lý", value: "pending" },
-  { text: "Đang xử lý", value: "processing" },
-  { text: "Đã hoàn thành", value: "completed" },
-  { text: "Đã huỷ", value: "cancelled" },
-];
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 const pageState = reactive({
   itemsPerPage: 10,
@@ -173,6 +167,7 @@ const pageState = reactive({
 });
 const searchForm = reactive({
   orderCode: "",
+  book_name: "",
   customerName: "",
   customerPhone: "",
   status: "",
@@ -227,7 +222,12 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     created_at = convertDateRange(searchForm.dateRange);
   }
 
-  const params = `order_code=${searchForm.orderCode}&customer_name=${searchForm.customerName}&customer_phone=${searchForm.customerPhone}&status=${searchForm.status}&${created_at}`;
+  const params = `order_code=${searchForm.orderCode}
+  &customer_name=${searchForm.customerName}
+  &customer_phone=${searchForm.customerPhone}
+  &status=${searchForm.status}
+  &book_name=${searchForm.book_name}
+  &${created_at}`;
 
   const { data: responseData } = await api(
     `/orders?${params}` + paging + sorting
@@ -239,7 +239,7 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
 
   if (responseData.value) {
     const { orders, pagination } = responseData.value.data;
-    pageState.items = orders;
+    pageState.items = orders
     pageState.totalItems = pagination.total;
     pageState.totalPages = pagination.total_pages;
   }

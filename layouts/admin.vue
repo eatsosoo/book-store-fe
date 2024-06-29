@@ -26,6 +26,12 @@
 
         <v-list density="compact" nav>
           <v-list-item
+            prepend-icon="mdi-chart-bar"
+            title="Tổng quát"
+            value="overview"
+            @click="$router.push('/admin')"
+          ></v-list-item>
+          <v-list-item
             prepend-icon="mdi-order-bool-ascending"
             title="Đơn hàng"
             value="orders"

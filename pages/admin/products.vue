@@ -161,7 +161,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, reactive } from "vue";
 import { useApi } from "@/composable/useApiFetch";
 

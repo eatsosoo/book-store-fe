@@ -80,7 +80,7 @@
         ></v-col>
       </v-row>
       <v-row>
-        <v-col cols="3" class="mt-3 MarginFieldSearch">Ngày tạo</v-col>
+        <v-col cols="3" class="mt-3 MarginFieldSearch">Ngày đặt hàng</v-col>
         <v-col cols="4">
           <v-date-input
             v-model="searchForm.dateRange"

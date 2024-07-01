@@ -29,7 +29,8 @@
                   <tr>
                     <th class="FontBold">Tên sách</th>
                     <th class="text-end FontBold">Số lượng</th>
-                    <th class="text-end FontBold">Giá</th>
+                    <th class="text-end FontBold">Đơn giá(đ)</th>
+                    <th class="text-end FontBold">Thành tiền</th> 
                   </tr>
                 </thead>
 
@@ -43,11 +44,13 @@
                         <v-btn color="primary" density="compact" icon="mdi-minus" @click="minusQuantity(index)"></v-btn>
                       </div>
                     </td>
+                    <td class="text-end" v-text="formatCurrency(product.price)"></td>
                     <td class="text-end" v-text="formatCurrency(product.quantity * product.price)"></td>
                   </tr>
 
                   <tr>
                     <th>Tổng</th>
+                    <th></th>
                     <th></th>
                     <th class="text-end">{{ formatCurrency(subtotal) }} đ</th>
                   </tr>
@@ -64,7 +67,7 @@
               <v-radio label="COD" value="CASH_ON_DELIVERY"></v-radio>
               <v-radio label="QR Thanh toán" value="QR_CODE"></v-radio>
             </v-radio-group>
-            <v-radio-group v-model="shipping.cost" label="Phương thức vận chuyển"
+            <v-radio-group v-model="shipping.cost" label="Thời gian giao hàng từ 2 - 5 ngày"
               color="primary">
               <v-radio label="Vận chuyển tiêu chuẩn" value="15000"></v-radio>
               <v-radio label="Vận chuyển ưu tiên" value="30000"></v-radio>
@@ -84,7 +87,7 @@
           </v-stepper-window-item>
 
           <v-stepper-window-item value="3">
-            <h3 class="text-h6">Confirm</h3>
+            <h3 class="text-h6">Xác nhận</h3>
             <div class="text-center">
               <img v-if="qrCodeUrl && shipping.method === 'QR_CODE'" :src="qrCodeUrl" class="QrCodeImage"></img>
             </div>
@@ -96,7 +99,8 @@
                     <th class="FontBold">Ảnh bìa</th>
                     <th class="FontBold">Tên sách</th>
                     <th class="text-end FontBold">Số lượng</th>
-                    <th class="text-end FontBold">Giá</th>
+                    <th class="text-end FontBold">Đơn giá(đ)</th>
+                    <th class="text-end FontBold">Thành tiền</th>
                   </tr>
                 </thead>
 
@@ -107,6 +111,7 @@
                     </td>
                     <td v-text="product.name"></td>
                     <td class="text-end" v-text="product.quantity"></td>
+                    <td class="text-end" v-text="formatCurrency(product.price)"></td>
                     <td class="text-end" v-text="formatCurrency(product.quantity * product.price) + ' đ'"></td>
                   </tr>
 
@@ -114,11 +119,13 @@
                     <td>Phí giao hàng</td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td class="text-end" v-text="formatCurrency(Number(shipping.cost)) + ' đ'"></td>
                   </tr>
 
                   <tr>
                     <th>Tổng</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th class="text-end">{{ formatCurrency(total) }} đ</th>
@@ -173,7 +180,7 @@
     </v-card>
 
     <v-dialog v-model="dialog" max-width="400" persistent>
-      <v-card text="Bạn muốn xoá sản phẩm khỏi giỏ hàng không?" title="Confirmation">
+      <v-card text="Bạn muốn xoá sản phẩm khỏi giỏ hàng không?" title="Xác nhận">
         <template v-slot:actions>
           <v-spacer></v-spacer>
 
@@ -209,6 +216,7 @@ const dialog = ref(false);
 const deleteId = ref<number | null>(null);
 const ordered = ref(false);
 const qrCodeUrl = ref<string | null>(null);
+const maxStock = ref<{ id: number, stock: number}[] | null>(null)
 
 const subtotal = computed(() => {
   return products.value.reduce(
@@ -256,6 +264,11 @@ const disabled = computed(() => {
 });
 
 const plusQuantity = (index: number) => {
+  const exceedLimit = maxStock.value?.find((item) => item.id === products.value[index].itemId && products.value[index].quantity === item.stock);
+  if (exceedLimit) {
+    toastError("Số lượng sách vượt quá giới hạn cho phép");
+    return;
+  };
   products.value[index].quantity++;
 };
 
@@ -309,13 +322,23 @@ const submitOrder = async () => {
   }
 };
 
+const getMaxStock = async () => {
+  const { api } = useApi(undefined, "POST", null, { book_ids: products.value.map((product) => product.itemId)});
+  const { data, error } = await api<ResponseResultType>(`/max_stock`);
+  if (error.value) {
+    toastError("Lỗi lấy thông tin sách");
+  } else {
+    maxStock.value = data.value?.data.max_stock;
+  }
+};
+
 const getQrCode = () => {
   const accountName = 'NGUYEN THI HONG DUYEN';
   const amount = total.value;
   const addInfo = 'Thanh toan hoa don';
   const BANK_ID = '970407';
   const ACCOUNT_NUMBER = '19035950613016';
-  return `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NUMBER}-compact.png?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`
+  return `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NUMBER}-print.png?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`
 };
 
 const nextStep = () => {
@@ -338,6 +361,8 @@ const prevStep = () => {
     step.value = "0";
   }
 };
+
+getMaxStock();
 </script>
 
 <style lang="scss" scoped>

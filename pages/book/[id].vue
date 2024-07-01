@@ -17,7 +17,7 @@
               <h2>{{ bookDetail.name }}</h2>
               <p class="mt-2">-- {{ bookDetail.author }} --</p>
               <h2 class="mt-2">{{ formatCurrency(bookDetail.price) }} đ</h2>
-              <p class="mt-2 DescriptionDetail">{{ bookDetail.description }}</p>
+              <p class="mt-2 DescriptionDetail"><span class="TextDark">Mô tả sản phẩm</span>: {{ bookDetail.description }}</p>
 
               <div class="NumberInput">
                 <div class="WidthInput">
@@ -155,5 +155,9 @@ loadItem();
   .WidthInput {
     width: 170px;
   }
+}
+
+.TextDark {
+  color: black;
 }
 </style>

@@ -25,7 +25,7 @@
                 <v-text-field
                   v-model="formData.image_url"
                   :rules="[required, url]"
-                  label="Ảnh bìa sách"
+                  label="Ảnh bìa sách (link ảnh)"
                   variant="outlined"
                   required
                   clearable

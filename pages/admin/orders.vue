@@ -144,7 +144,7 @@ const DEFAULT_HEADERS = [
   { title: "Số điện thoại", key: "customer_phone", align: "start" },
   { title: "Tổng đơn hàng (VNĐ)", key: "total_amount", align: "center" },
   { title: "Trạng thái", key: "status", align: "center" },
-  { title: "Ngày tạo", key: "created_at", align: "center" },
+  { title: "Ngày đặt hàng", key: "created_at", align: "center" },
   {
     title: "Cập nhật trạng thái",
     key: "actions",

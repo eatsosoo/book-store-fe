@@ -2,6 +2,69 @@
   <div>
     <h1>Tổng quát</h1>
     <!-- Add your admin page content here -->
+     <v-card class="pa-2 mt-5">
+      <v-row>
+        <v-col cols="3">
+          <v-card class="pa-4" height="150px">
+            <v-row>
+              <v-col cols="4">
+                <v-icon size="40">mdi-finance</v-icon>
+              </v-col>
+              <v-col cols="8">
+                <h3>Doanh thu tuần này</h3>
+                <br>
+                <h1>{{ formatCurrency(commonData.revenue_this_week) }} đ</h1>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+
+        <v-col cols="3">
+          <v-card class="pa-4" height="150px">
+            <v-row>
+              <v-col cols="4">
+                <v-icon size="40">mdi-hand-coin</v-icon>
+              </v-col>
+              <v-col cols="8">
+                <h3>Số lượng đơn hàng tuần này</h3>
+                <br>
+                <h1>{{ commonData.orders_this_week }}</h1>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+
+        <v-col cols="3">
+          <v-card class="pa-4" height="150px">
+            <v-row>
+              <v-col cols="4" >
+                <v-icon size="40">mdi-chart-arc</v-icon>
+              </v-col>
+              <v-col cols="8">
+                <h3>Doanh thu hôm nay</h3>
+                <br>
+                <h1>{{ formatCurrency(commonData.revenue_today) }} đ</h1>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+
+        <v-col cols="3">
+          <v-card class="pa-4" height="150px">
+            <v-row>
+              <v-col cols="4">
+                <v-icon size="40">mdi-file-chart-outline</v-icon>
+              </v-col>
+              <v-col cols="8">
+                <h3>Số lượng đơn hàng hôm nay</h3>
+                <br>
+                <h1>{{ commonData.orders_today }}</h1>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+     </v-card>
 
     <v-card class="pa-4 mt-5">
       <v-row>
@@ -35,6 +98,7 @@ type RevenueItem = {
   total: number;
 };
 
+const commonData = ref({})
 const testData = reactive({
   labels: [],
   datasets: [
@@ -110,6 +174,17 @@ const loadRevenue = async () => {
   }
 };
 
+const loadStatistics = async () => {
+  const { api } = useApi(undefined, "GET", null, undefined);
+  const { data } = await api<ResponseResultType>("/statistics");
+
+  if (data.value) {
+    const { statistics } = data.value.data;
+    commonData.value = statistics;
+  }
+};
+
+loadStatistics();
 loadRevenue();
 </script>
 

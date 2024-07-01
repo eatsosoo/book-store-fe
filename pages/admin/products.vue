@@ -109,6 +109,7 @@
           <template v-slot:loading>
             <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
           </template>
+          <template #item.book_cover_url="{ item }"><img :src="item.book_cover_url" alt="img" class="BookCoverWidth"></template>
           <template #item.price="{ item }">{{ formatCurrency(item.price) }} đ</template>
           <template #item.actions="{ item }">
             <v-icon
@@ -176,6 +177,7 @@ const DEFAULT_HEADERS = [
     key: "id",
   },
   { title: "Tên sách", key: "name", align: "start" },
+  { title: "Ảnh bìa", key: "book_cover_url", align: "center"},
   { title: "Tác giá", key: "author", align: "start" },
   { title: "Danh mục", key: "category_name", align: "start" },
   { title: "Giá (VNĐ)", key: "price", align: "center" },
@@ -294,5 +296,9 @@ loadCategories();
 <style scoped>
 .DataTableHeight {
   max-height: 650px;
+}
+.BookCoverWidth {
+  width: 80px;
+  margin-top: 5px;
 }
 </style>

@@ -41,7 +41,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" class="d-flex justify-space-between">
-                <span> @CopyRight 2021 Bookie. All Rights Reserved </span>
+                <span> @CopyRight 2024 Bookie. All Rights Reserved </span>
                 <span> Trang web được tạo bởi Nguyễn Hồng Duyên </span>
               </v-col>
             </v-row>

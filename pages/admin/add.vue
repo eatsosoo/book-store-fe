@@ -48,7 +48,7 @@
             <v-text-field
               v-model="formData.book_cover_url"
               :rules="[required, url]"
-              label="Bìa sách"
+              label="Bìa sách (link ảnh)"
               variant="outlined"
               required
               clearable

@@ -56,7 +56,7 @@
         <v-col lg="2" md="4" sm="4" v-for="category in categoryList" :key="category.id">
           <div class="relative d-flex align-center flex-column">
             <div class="CategoryCircle"></div>
-            <div class="mb-5 d-flex justify-center align-center flex-column">
+            <div class="mb-5 d-flex justify-center align-center flex-column" @click="$router.push(`/category/${category.id}`)">
               <v-img :src="category.image_url" class="CategoryImg mb-10"></v-img>
               <p class="text-subtitle-2 font-weight-bold">
                 {{ category.name }}

@@ -2,69 +2,71 @@
   <div>
     <h1>Tổng quát</h1>
     <!-- Add your admin page content here -->
-     <v-card class="pa-2 mt-5">
+    <v-card class="pa-2 mt-5">
       <v-row>
         <v-col cols="3">
-          <v-card class="pa-4" height="150px">
+          <v-card class="pa-4 Bg1" height="150px">
             <v-row>
               <v-col cols="4">
                 <v-icon size="40">mdi-finance</v-icon>
               </v-col>
               <v-col cols="8">
                 <h3>Doanh thu tuần này</h3>
-                <br>
-                <h1>{{ formatCurrency(commonData.revenue_this_week) }} đ</h1>
+                <br />
+                <br />
+                <h2>{{ formatCurrency(commonData.revenue_this_week) }} đ</h2>
               </v-col>
             </v-row>
           </v-card>
         </v-col>
 
         <v-col cols="3">
-          <v-card class="pa-4" height="150px">
+          <v-card class="pa-4 Bg2" height="150px">
             <v-row>
               <v-col cols="4">
                 <v-icon size="40">mdi-hand-coin</v-icon>
               </v-col>
               <v-col cols="8">
                 <h3>Số lượng đơn hàng tuần này</h3>
-                <br>
-                <h1>{{ commonData.orders_this_week }}</h1>
+                <br />
+                <h2>{{ commonData.orders_this_week }}</h2>
               </v-col>
             </v-row>
           </v-card>
         </v-col>
 
         <v-col cols="3">
-          <v-card class="pa-4" height="150px">
+          <v-card class="pa-4 Bg3" height="150px">
             <v-row>
-              <v-col cols="4" >
+              <v-col cols="4">
                 <v-icon size="40">mdi-chart-arc</v-icon>
               </v-col>
               <v-col cols="8">
                 <h3>Doanh thu hôm nay</h3>
-                <br>
-                <h1>{{ formatCurrency(commonData.revenue_today) }} đ</h1>
+                <br />
+                <br />
+                <h2>{{ formatCurrency(commonData.revenue_today) }} đ</h2>
               </v-col>
             </v-row>
           </v-card>
         </v-col>
 
         <v-col cols="3">
-          <v-card class="pa-4" height="150px">
+          <v-card class="pa-4 Bg4" height="150px">
             <v-row>
               <v-col cols="4">
                 <v-icon size="40">mdi-file-chart-outline</v-icon>
               </v-col>
               <v-col cols="8">
                 <h3>Số lượng đơn hàng hôm nay</h3>
-                <br>
-                <h1>{{ commonData.orders_today }}</h1>
+                <br />
+                <h2>{{ commonData.orders_today }}</h2>
               </v-col>
             </v-row>
           </v-card>
         </v-col>
       </v-row>
-     </v-card>
+    </v-card>
 
     <v-card class="pa-4 mt-5">
       <v-row>
@@ -98,7 +100,12 @@ type RevenueItem = {
   total: number;
 };
 
-const commonData = ref({})
+const commonData = ref({
+  revenue_this_week: 0,
+  orders_this_week: 1,
+  revenue_today: 0,
+  orders_today: 0,
+});
 const testData = reactive({
   labels: [],
   datasets: [
@@ -161,7 +168,7 @@ const testData = reactive({
   ],
 });
 
-const options = { plugins: { legend: { display: false }, } }
+const options = { plugins: { legend: { display: false } } };
 
 const loadRevenue = async () => {
   const { api } = useApi(undefined, "POST", null, { year: 2024 });
@@ -189,5 +196,20 @@ loadRevenue();
 </script>
 
 <style scoped>
-/* Add your component styles here */
+.Bg1 {
+  background-color: #b9e3e7;
+  color: #fff;
+}
+.Bg2 {
+  background-color: #ffd564;
+  color: #fff;
+}
+.Bg3 {
+  background-color: #44bcf6;
+  color: #fff;
+}
+.Bg4 {
+  background-color: #8052ee;
+  color: #fff;
+}
 </style>

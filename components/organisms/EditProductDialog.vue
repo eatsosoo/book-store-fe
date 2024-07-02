@@ -26,15 +26,19 @@
                   density="compact"
                   class="mb-3"
                 ></v-text-field>
-                <v-text-field
-                  v-model="formData.author"
-                  :rules="[required]"
+                <v-select
+                  v-model="formData.author_id"
                   label="Tác giả"
+                  :rules="[required]"
+                  :items="authorList"
+                  item-title="name"
+                  item-value="id"
                   required
+                  clearable
                   variant="outlined"
                   density="compact"
                   class="mb-3"
-                ></v-text-field>
+                ></v-select>
                 <v-select
                   v-model="formData.category_id"
                   label="Danh mục"
@@ -135,7 +139,7 @@ const form = ref(false);
 const formData = reactive({
   id: null,
   name: "",
-  author: "",
+  author_id: 1,
   user_id: 1,
   price: "",
   stock: "",
@@ -144,6 +148,7 @@ const formData = reactive({
   description: "",
 });
 const categoryList = ref([]);
+const authorList = ref([]);
 const loading = reactive({
   submit: false,
   detail: false,
@@ -186,6 +191,20 @@ const loadCategories = async () => {
   }
 };
 
+const loadAuthors = async () => {
+  const { api } = useApi(undefined, "GET", null, undefined);
+  const { data: responseData } = await api<ResponseResultType>(`/authors`);
+
+  if (!responseData) {
+    authorList.value = [];
+  }
+
+  if (responseData.value) {
+    const { authors } = responseData.value.data;
+    authorList.value = authors;
+  }
+};
+
 const loadDetail = async () => {
   loading.detail = true;
 
@@ -202,7 +221,7 @@ const loadDetail = async () => {
     const { book } = responseData.value.data;
     formData.id = book.id;
     formData.name = book.name;
-    formData.author = book.author;
+    formData.author_id = book.author_id;
     formData.user_id = book.user_id;
     formData.price = book.price;
     formData.stock = book.stock;
@@ -215,6 +234,7 @@ const loadDetail = async () => {
 };
 
 loadCategories();
+loadAuthors();
 
 watch(
   () => props.active,

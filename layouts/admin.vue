@@ -56,6 +56,12 @@
             @click="$router.push('/admin/categories')"
           ></v-list-item>
           <v-list-item
+            prepend-icon="mdi-view-list"
+            title="Tác giả"
+            value="authors"
+            @click="$router.push('/admin/authors')"
+          ></v-list-item>
+          <v-list-item
             prepend-icon="mdi-home-city"
             title="Về trang chủ"
             value="home"

@@ -24,3 +24,9 @@ export const telephone = (v: any) => {
   const pattern = /^\d{10}$/;
   return pattern.test(v) || "Số điện thoại không hợp lệ";
 };
+
+
+export const dateOfBirth = (v: any) => {
+  const pattern = /^\d{4}-\d{2}-\d{2}$/;
+  return pattern.test(v) || "Ngày sinh không hợp lệ";
+}

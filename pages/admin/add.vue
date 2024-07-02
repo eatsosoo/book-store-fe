@@ -18,10 +18,13 @@
               color="primary"
               class="mb-3"
             ></v-text-field>
-            <v-text-field
-              v-model="formData.author"
-              :rules="[required]"
+            <v-select
+              v-model="formData.author_id"
               label="Tác giả"
+              :rules="[required]"
+              :items="authorList"
+              item-title="name"
+              item-value="id"
               required
               clearable
               variant="outlined"
@@ -29,7 +32,7 @@
               base-color="primary"
               color="primary"
               class="mb-3"
-            ></v-text-field>
+            ></v-select>
             <v-select
               v-model="formData.category_id"
               label="Danh mục"
@@ -148,7 +151,7 @@ const imgDefault =
 const form = ref(false);
 const formData = reactive({
   name: "",
-  author: "",
+  author_id: 1,
   user_id: 1,
   price: "",
   stock: "",
@@ -163,11 +166,13 @@ const dialog = reactive({
   title: "Completed",
 });
 const categoryList = ref([]);
+const authorList = ref([]);
+
 const loading = ref(false);
 
 const resetFormData = () => {
   formData.name = "";
-  formData.author = "";
+  formData.author_id = 1;
   formData.user_id = 1;
   formData.price = "";
   formData.stock = "";
@@ -214,7 +219,22 @@ const loadCategories = async () => {
   }
 };
 
+const loadAuthors = async () => {
+  const { api } = useApi(undefined, "GET", null, undefined);
+  const { data: responseData } = await api<ResponseResultType>(`/authors`);
+
+  if (!responseData) {
+    authorList.value = [];
+  }
+
+  if (responseData.value) {
+    const { authors } = responseData.value.data;
+    authorList.value = authors;
+  }
+};
+
 loadCategories();
+loadAuthors();
 </script>
 
 <style>

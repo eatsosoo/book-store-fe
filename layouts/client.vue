@@ -7,6 +7,8 @@
     </div>
 
     <Footer />
+
+    <ChatBot />
   </div>
 </template>
 

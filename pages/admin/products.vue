@@ -19,9 +19,7 @@
             ></v-col>
           </v-row>
           <v-row>
-            <v-col cols="3" class="mt-3 MarginFieldSearch"
-              >Tên tác giả</v-col
-            >
+            <v-col cols="3" class="mt-3 MarginFieldSearch">Tên tác giả</v-col>
             <v-col cols="4"
               ><v-text-field
                 v-model="searchForm.author"
@@ -109,8 +107,12 @@
           <template v-slot:loading>
             <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
           </template>
-          <template #item.book_cover_url="{ item }"><img :src="item.book_cover_url" alt="img" class="BookCoverWidth"></template>
-          <template #item.price="{ item }">{{ formatCurrency(item.price) }} đ</template>
+          <template #item.book_cover_url="{ item }"
+            ><img :src="item.book_cover_url" alt="img" class="BookCoverWidth"
+          /></template>
+          <template #item.price="{ item }"
+            >{{ formatCurrency(item.price) }} đ</template
+          >
           <template #item.actions="{ item }">
             <v-icon
               class="mr-2 mt-1"
@@ -140,7 +142,7 @@
           </v-btn>
 
           <v-btn
-            @click="deleteItem(pageState.deleteItem.id)"
+            @click="deleteItem(pageState.deleteItem?.id)"
             color="primary"
             variant="outlined"
           >
@@ -164,7 +166,7 @@
 
 <script setup lang="ts">
 import { computed, reactive } from "vue";
-import { useApi } from "@/composable/useApiFetch";
+import { useApi, type ResponseResultType } from "@/composable/useApiFetch";
 
 definePageMeta({
   layout: "admin",
@@ -177,7 +179,7 @@ const DEFAULT_HEADERS = [
     key: "id",
   },
   { title: "Tên sách", key: "name", align: "start" },
-  { title: "Ảnh bìa", key: "book_cover_url", align: "center"},
+  { title: "Ảnh bìa", key: "book_cover_url", align: "center" },
   { title: "Tác giá", key: "author", align: "start" },
   { title: "Danh mục", key: "category_name", align: "start" },
   { title: "Giá (VNĐ)", key: "price", align: "center" },
@@ -206,17 +208,25 @@ const dialog = ref(false);
 const editDialog = ref(false);
 
 const pageText = computed(() => {
-  return `Trang ${pageState.page} / ${pageState.totalPages}`
+  return `Trang ${pageState.page} / ${pageState.totalPages}`;
 });
 
 const questionDelete = computed(() => {
   if (pageState.deleteItem) {
-    return `Bạn có chắc chắn muốn xoá cuốn sách: ${pageState.deleteItem.name}?`;
+    return `Bạn có chắc chắn muốn xoá cuốn sách: ${pageState.deleteItem?.name}?`;
   }
   return "Bạn có chắc chắn muốn xoá sản phảm này?";
 });
 
-const loadItems = async ({ page, itemsPerPage, sortBy }) => {
+const loadItems = async ({
+  page,
+  itemsPerPage,
+  sortBy,
+}: {
+  page: number;
+  itemsPerPage: number;
+  sortBy: any;
+}) => {
   pageState.loading = true;
   pageState.sort = sortBy;
 
@@ -236,7 +246,9 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
 
   const params = `name=${searchForm.bookName}&author=${searchForm.author}&category_id=${searchForm.categoryId}`;
 
-  const { data: responseData } = await api(`/books?${params}` + paging + sorting);
+  const { data: responseData } = await api<ResponseResultType>(
+    `/books?${params}` + paging + sorting
+  );
 
   if (!responseData) {
     pageState.items = [];
@@ -252,11 +264,11 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
   pageState.loading = false;
 };
 
-const deleteItem = async (id) => {
+const deleteItem = async (id: number) => {
   if (!id) return;
 
   const { api } = useApi(undefined, "DELETE", null, undefined);
-  const { data: responseData } = await api(`/books/${id}`);
+  const { data: responseData } = await api<ResponseResultType>(`/books/${id}`);
 
   if (responseData) {
     loadItems({ page: 1, itemsPerPage: 10, sortBy: DEFAULT_SORT });
@@ -268,7 +280,7 @@ const deleteItem = async (id) => {
 const loadCategories = async () => {
   const { api } = useApi(undefined, "GET", null, undefined);
 
-  const { data: responseData } = await api("/categories");
+  const { data: responseData } = await api<ResponseResultType>("/categories");
 
   if (!responseData) {
     pageState.items = [];

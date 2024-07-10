@@ -18,7 +18,7 @@
       <v-text-field
         v-model="loginForm.email"
         density="compact"
-        placeholder="Email address"
+        placeholder="Địa chỉ email"
         prepend-inner-icon="mdi-email-outline"
         variant="outlined"
         color="primary"
@@ -44,7 +44,7 @@
         :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
         :type="visible ? 'text' : 'password'"
         density="compact"
-        placeholder="Enter your password"
+        placeholder="Nhập mật khẩu"
         prepend-inner-icon="mdi-lock-outline"
         variant="outlined"
         color="primary"

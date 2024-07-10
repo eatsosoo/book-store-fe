@@ -130,17 +130,17 @@ const onSubmit = async () => {
   
   if (error.value) {
     const { errors } = error.value?.data.data;
-    toastError(errors.email[0] || errors.password[0] || errors.name[0] || "Something wrong. Please try again later.");
+    toastError(errors.email[0] || errors.password[0] || errors.name[0] || "Có lỗi xảy ra. Vui lòng thử lại sau.");
     return;
   }
   
   if (responseData.value) {
     const { data } = responseData.value;
     if (data) {
-      toastSuccess('Register success. Please login to continue.');
+      toastSuccess('Đăng ký thành công.');
       reset();
     } else {
-      toastError("Something wrong. Please try again later.");
+      toastError("Có lỗi xảy ra. Vui lòng thử lại sau.");
     }
   }
 };

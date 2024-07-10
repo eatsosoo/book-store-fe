@@ -58,6 +58,14 @@
               @click="dialog = true"
             ></v-btn>
           </div>
+          <div>
+            <v-btn
+              icon="mdi-account"
+              color="white"
+              density="comfortable"
+              class="ml-4"
+            ></v-btn>
+          </div>
         </div>
       </div>
     </v-container>

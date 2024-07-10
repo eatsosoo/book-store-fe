@@ -9,68 +9,25 @@
         <v-row>
           <v-col cols="12">
             <v-form v-model="form" @submit.prevent="onSubmit" class="FormWidth">
-                <div>
-                <v-text-field
-                  v-model="formData.name"
-                  :rules="[required]"
-                  label="Tên tác giả"
-                  required
-                  clearable
-                  variant="outlined"
-                  density="compact"
-                  color="primary"
-                  class="mb-3"
-                ></v-text-field>
+              <div>
+                <v-text-field v-model="formData.name" :rules="[required]" label="Tên tác giả" required clearable
+                  variant="outlined" density="compact" color="primary" class="mb-3"></v-text-field>
 
-                <v-text-field
-                  v-model="formData.nationality"
-                  :rules="[required]"
-                  label="Quốc tịch"
-                  variant="outlined"
-                  required
-                  clearable
-                  density="compact"
-                  color="primary"
-                  class="mb-3"
-                ></v-text-field>
+                <v-select v-model="formData.nationality" :rules="[required]" :items="NATIONALITY" label="Quốc tịch" variant="outlined"
+                  required clearable density="compact" color="primary" class="mb-3"></v-select>
 
-                <v-text-field
-                  v-model="formData.dob"
-                  :rules="[required, dateOfBirth]"
-                  variant="outlined"
-                  label="Ngày sinh"
-                  placeholder="YYYY-MM-DD"
-                  required
-                  clearable
-                  density="compact"
-                  color="primary"
-                  class="mb-3"
-                ></v-text-field>
+                <v-text-field v-model="formData.dob" :rules="[required, dateOfBirth]" variant="outlined"
+                  label="Ngày sinh" placeholder="YYYY-MM-DD" required clearable density="compact" color="primary"
+                  class="mb-3"></v-text-field>
 
-                <v-text-field
-                  v-model="formData.pseudonym"
-                  :rules="[required]"
-                  label="Bút danh"
-                  variant="outlined"
-                  required
-                  clearable
-                  density="compact"
-                  color="primary"
-                  class="mb-3"
-                ></v-text-field>
+                <v-text-field v-model="formData.pseudonym" :rules="[required]" label="Bút danh" variant="outlined"
+                  required clearable density="compact" color="primary" class="mb-3"></v-text-field>
               </div>
 
               <div class="text-center">
-                <v-btn
-                  :disabled="!form"
-                  color="primary"
-                  type="submit"
-                  variant="elevated"
-                  :loading="loading.submit"
-                  >{{
-                    props.authorId !== "" ? "Cập nhật" : "Thêm mới"
-                  }}</v-btn
-                >
+                <v-btn :disabled="!form" color="primary" type="submit" variant="elevated" :loading="loading.submit">{{
+                  props.authorId !== "" ? "Cập nhật" : "Thêm mới"
+                }}</v-btn>
               </div>
             </v-form>
           </v-col>
@@ -94,6 +51,8 @@ const props = defineProps({
   },
 });
 const emits = defineEmits(["submit", "close"]);
+
+const NATIONALITY = ["Việt Nam", "Mỹ", "Anh", "Pháp", "Nga", "Nhật Bản", "Hàn Quốc", "Trung Quốc", "Đức", "Ý", "Tây Ban Nha", "Bồ Đào Nha", "Hà Lan", "Thụy Điển", "Na Uy", "Phần Lan", "Thụy Sĩ", "Áo", "Ba Lan", "Séc", "Slovakia", "Hungary", "Rumani", "Bulgaria", "Hy Lạp", "Thổ Nhĩ Kỳ"];
 
 const form = ref(false);
 const formData = reactive({

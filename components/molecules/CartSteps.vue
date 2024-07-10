@@ -67,12 +67,13 @@
               <v-radio label="COD" value="CASH_ON_DELIVERY"></v-radio>
               <v-radio label="QR Thanh toán" value="QR_CODE"></v-radio>
             </v-radio-group>
-            <v-radio-group v-model="shipping.cost" label="Thời gian giao hàng từ 2 - 5 ngày"
+            <!-- <v-radio-group v-model="shipping.cost" label="Thời gian giao hàng từ 2 - 5 ngày"
               color="primary">
               <v-radio label="Vận chuyển tiêu chuẩn" value="15000"></v-radio>
               <v-radio label="Vận chuyển ưu tiên" value="30000"></v-radio>
               <v-radio label="Chuyển phát nhanh" value="45000"></v-radio>
-            </v-radio-group>
+            </v-radio-group> -->
+            <p class="ml-4 mb-4">Thời gian giao hàng từ 2 - 5 ngày</p>
             <h3 class="text-h6">Thông tin giao hàng</h3>
             <br />
             <v-text-field v-model="shipping.customer_name" :rules="[required]" label="Tên người nhận" density="compact"

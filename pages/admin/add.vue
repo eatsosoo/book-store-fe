@@ -161,7 +161,7 @@ const formData = reactive({
 });
 const dialog = reactive({
   active: false,
-  message: "Book has been added successfully!",
+  message: "Sách đã được thêm thành công!",
   icon: "mdi-check-circle-outline",
   title: "Completed",
 });

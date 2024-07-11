@@ -8,6 +8,7 @@
         </NuxtLink>
         <div class="Search">
           <v-text-field
+            v-model="searchKey"
             :loading="loading"
             append-inner-icon="mdi-magnify"
             density="compact"
@@ -16,6 +17,7 @@
             hide-details
             single-line
             rounded="pill"
+            @keydown.enter="$router.push(`/book?name=${searchKey}`)"
           ></v-text-field>
         </div>
         <div v-if="!authStore.hasToken" class="d-flex">
@@ -96,6 +98,7 @@ const loading = ref(false);
 const dialog = ref(false);
 const dialog2 = ref(false);
 const cartQuantity = computed(() => cartStore.cart.items.length);
+const searchKey = ref("");
 </script>
 
 <style lang="scss">

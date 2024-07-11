@@ -94,6 +94,7 @@ type BookType = {
 };
 
 const cartStore = useCartStore();
+const route = useRoute();
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 const pageState = reactive({
   itemsPerPage: 20,
@@ -106,7 +107,7 @@ const pageState = reactive({
   categories: [],
 });
 const searchForm = reactive({
-  bookName: "",
+  bookName: route.query.name as string || '',
   author: "",
   categoryId: "",
 });
@@ -144,7 +145,7 @@ const loadItems = async ({
   const params = `name=${searchForm.bookName}&author=${searchForm.author}&category_id=${searchForm.categoryId}`;
 
   const { data: responseData } = await api<ResponseResultType>(
-    `/books?` + paging + sorting
+    `/books?` + paging + sorting + "&" + params
   );
 
   if (!responseData) {
@@ -201,6 +202,16 @@ loadItems({
   page: 1,
   itemsPerPage: pageState.itemsPerPage,
   sortBy: DEFAULT_SORT,
+});
+
+watch(() => route.query.name, (newName, oldName) => {
+  // Update the searchForm.bookName with the new value
+  searchForm.bookName = newName as string || '';
+  loadItems({
+    page: 1,
+    itemsPerPage: pageState.itemsPerPage,
+    sortBy: DEFAULT_SORT,
+  });
 });
 </script>
 

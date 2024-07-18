@@ -4,11 +4,11 @@
       <template v-slot:actions>
         <v-spacer></v-spacer>
 
-        <v-btn @click="$emit('rejected'), dialog = false" color="primary" variant="elevated">
+        <v-btn @click="$emit('rejected'), dialog = false" color="primary" :variant="variant1">
           Huỷ
         </v-btn>
 
-        <v-btn @click="$emit('accepted'), dialog = false" color="primary" variant="outlined">
+        <v-btn @click="$emit('accepted'), dialog = false" color="primary" :variant="variant2">
           OK
         </v-btn>
       </template>
@@ -26,9 +26,15 @@ const props = defineProps({
     type: String,
     default: "Bạn có chắc chắn muốn thực hiện hành động này không?",
   },
+  negative: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const dialog = ref(false);
+const variant1 = props.negative ? "outlined" : "elevated";
+const variant2 = props.negative ? "elevated" : "outlined";
 
 watch(
   () => props.active,

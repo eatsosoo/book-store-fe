@@ -82,6 +82,7 @@
     <Confirm
       :active="dialog2"
       text="Vui lòng đăng nhặp để tiếp tục!"
+      :negative="true"
       @accepted="$router.push('/login')"
       @rejected="dialog2 = false"
     ></Confirm>

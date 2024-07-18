@@ -56,7 +56,8 @@
         <v-col lg="2" md="4" sm="4" v-for="category in categoryList" :key="category.id">
           <div class="relative d-flex align-center flex-column">
             <div class="CategoryCircle"></div>
-            <div class="mb-5 d-flex justify-center align-center flex-column" @click="$router.push(`/category/${category.id}`)">
+            <div class="mb-5 d-flex justify-center align-center flex-column"
+              @click="$router.push(`/category/${category.id}`)">
               <v-img :src="category.image_url" class="CategoryImg mb-10"></v-img>
               <p class="text-subtitle-2 font-weight-bold">
                 {{ category.name }}
@@ -164,11 +165,23 @@ const loadItems = async () => {
   if (booksCategory.value) {
     const { books } = booksCategory.value.data;
     featuredBooks.value = books;
-    bestSellers.value = books;
+  }
+};
+
+const loadTopBooks = async () => {
+  const { api } = useApi(undefined, "GET", null, undefined);
+  const { data: topBooks } = await api<ResponseResultType>(
+    "/books/top_books"
+  );
+
+  if (topBooks.value) {
+    const { top_books } = topBooks.value.data;
+    bestSellers.value = top_books;
   }
 };
 
 loadItems();
+loadTopBooks();
 </script>
 
 <style scoped lang="scss">
@@ -284,12 +297,12 @@ loadItems();
 }
 
 .Link {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 
-    i {
-        color: #a287d7;
-    }
+  i {
+    color: #a287d7;
+  }
 }
 
 .TextWithEllipsis {

@@ -72,7 +72,7 @@
                 <thead>
                   <tr>
                     <th class="FontBold">Thông tin giao hàng</th>
-                    <th class="text-end FontBold">Chi tiết</th>
+                    <th class="text-end FontBold"></th>
                   </tr>
                 </thead>
 

@@ -73,16 +73,14 @@
         <v-col></v-col>
       </v-row>
       <v-row>
-        <v-col cols="8">
+        <v-col cols="12">
           <BarChart :chartData="testData" :chart-options="options" />
-        </v-col>
-        <v-col cols="4">
-          <DoughnutChart :chartData="testData" />
         </v-col>
       </v-row>
     </v-card>
 
     <v-card class="pa-5 mt-5">
+      <h3 class="mb-5">Sản phẩm sắp hết hàng</h3>
       <v-data-table-server
           v-model:items-per-page="pageState.itemsPerPage"
           :headers="DEFAULT_HEADERS"
@@ -111,6 +109,23 @@
           <template #item.price="{ item }"
             >{{ formatCurrency(item.price) }} đ</template
           >
+        </v-data-table-server>
+    </v-card>
+
+    <v-card class="pa-5 mt-5">
+      <h3 class="mb-5">Sản phẩm bán chạy nhất</h3>
+
+      <v-data-table-server
+          :headers="DEFAULT_HEADERS"
+          :items="pageState.topBooks"
+          :items-length="pageState.topBooks.length"
+          no-data-text="Không có sản phẩm nào"
+          class="DataTableHeight"
+          :hide-default-footer="true"
+        >
+          <template v-slot:loading>
+            <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+          </template>
         </v-data-table-server>
     </v-card>
   </div>
@@ -209,9 +224,7 @@ const DEFAULT_HEADERS = [
   { title: "Tên sách", key: "name", align: "start" },
   { title: "Tác giá", key: "author", align: "start" },
   { title: "Danh mục", key: "category_name", align: "start" },
-  { title: "Giá (VNĐ)", key: "price", align: "center" },
   { title: "Sản phẩm còn (Quyển)", key: "stock", align: "center" },
-  { title: "", key: "actions", align: "center", sortable: false },
 ];
 const DEFAULT_SORT = [{ key: "id", order: "desc" }];
 const pageState = reactive({
@@ -221,6 +234,7 @@ const pageState = reactive({
   loading: true,
   totalItems: 0,
   items: [],
+  topBooks: [],
   deleteItem: null,
   editId: "",
   sort: DEFAULT_SORT,
@@ -298,9 +312,20 @@ const loadItems = async ({
   pageState.loading = false;
 };
 
+const loadTopBooks = async () => {
+  const { api } = useApi(undefined, "GET", null, undefined);
+  const { data: responseData } = await api<ResponseResultType>('/books/top_books');
+
+  if (responseData.value) {
+    const { top_books } = responseData.value.data;
+    pageState.topBooks = top_books;
+  }
+}
+
 loadStatistics();
 loadRevenue();
-loadItems();
+loadItems({ page: 1, itemsPerPage: 10, sortBy: DEFAULT_SORT });
+loadTopBooks();
 </script>
 
 <style scoped>

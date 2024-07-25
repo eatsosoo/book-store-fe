@@ -1,7 +1,7 @@
 <template>
   <div class="HomePage">
     <div>
-      <v-img src="@/assets/img/image.png"></v-img>
+      <v-img src="@/assets/img/banner.jpeg"></v-img>
     </div>
 
     <v-container>

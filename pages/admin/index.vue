@@ -109,6 +109,9 @@
           <template #item.price="{ item }"
             >{{ formatCurrency(item.price) }} đ</template
           >
+          <template #item.book_cover_url="{ item }"
+            ><img :src="item.book_cover_url" alt="img" class="BookCoverWidth"
+          /></template>
         </v-data-table-server>
     </v-card>
 
@@ -126,6 +129,9 @@
           <template v-slot:loading>
             <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
           </template>
+          <template #item.book_cover_url="{ item }"
+            ><img :src="item.book_cover_url" alt="img" class="BookCoverWidth"
+          /></template>
         </v-data-table-server>
     </v-card>
   </div>
@@ -222,6 +228,7 @@ const DEFAULT_HEADERS = [
     key: "id",
   },
   { title: "Tên sách", key: "name", align: "start" },
+  { title: "Bìa sách", key: "book_cover_url", align: "center" },
   { title: "Tác giá", key: "author", align: "start" },
   { title: "Danh mục", key: "category_name", align: "start" },
   { title: "Sản phẩm còn (Quyển)", key: "stock", align: "center" },
@@ -344,5 +351,9 @@ loadTopBooks();
 .Bg4 {
   background-color: #8052ee;
   color: #fff;
+}
+.BookCoverWidth {
+  width: 80px;
+  margin-top: 5px;
 }
 </style>

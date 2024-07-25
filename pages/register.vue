@@ -138,7 +138,8 @@ const onSubmit = async () => {
     const { data } = responseData.value;
     if (data) {
       toastSuccess('Đăng ký thành công.');
-      reset();
+      const router = useRouter();
+      router.push("/login");
     } else {
       toastError("Có lỗi xảy ra. Vui lòng thử lại sau.");
     }

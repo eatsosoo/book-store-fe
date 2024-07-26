@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" max-width="500" persistent>
     <v-card :loading="loading.detail" :disabled="loading.detail">
       <div class="bg-primary py-3 px-3 d-flex justify-space-between">
-        <p>{{ props.authorId !== "" ? "Cập nhât" : "Thêm mới" }} tác giả</p>
+        <p>{{ props.authorId !== "" ? "Cập nhật" : "Thêm mới" }} tác giả</p>
         <v-icon @click="close">mdi-close</v-icon>
       </div>
       <v-card-actions class="pa-3">

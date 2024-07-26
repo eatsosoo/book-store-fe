@@ -30,3 +30,7 @@ export const dateOfBirth = (v: any) => {
   const pattern = /^\d{4}-\d{2}-\d{2}$/;
   return pattern.test(v) || "Ngày sinh không hợp lệ";
 }
+
+export const maxNumber = (v: any, max: number) => {
+  return v <= max || `Trường này phải nhỏ hơn hoặc bằng ${max}`;
+}

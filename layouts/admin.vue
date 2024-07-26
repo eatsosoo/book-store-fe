@@ -56,7 +56,7 @@
             @click="$router.push('/admin/categories')"
           ></v-list-item>
           <v-list-item
-            prepend-icon="mdi-view-list"
+            prepend-icon="mdi-at"
             title="Tác giả"
             value="authors"
             @click="$router.push('/admin/authors')"

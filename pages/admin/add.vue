@@ -75,7 +75,7 @@
             ></v-text-field>
             <v-text-field
               v-model="formData.stock"
-              :rules="[required, number]"
+              :rules="[required, number, maxNumber(formData.stock, 200)]"
               type="number"
               label="Số lượng nhập"
               variant="outlined"
@@ -84,6 +84,7 @@
               density="compact"
               base-color="primary"
               min="0"
+              max="200"
               color="primary"
               class="mb-3"
             ></v-text-field>

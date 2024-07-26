@@ -103,6 +103,11 @@ const addToCart = () => {
     return;
   }
 
+  if (quantity.value > bookDetail.value.stock) {
+    message.value = "Số lượng sách trong kho không đủ!";
+    return;
+  }
+
   const cartItem = {
     itemId: bookDetail.value.id,
     name: bookDetail.value.name,
